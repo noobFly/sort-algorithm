@@ -24,7 +24,7 @@ public class ShellSort extends AbstractSort {
             for (int i = 0; i <= gap; i++) {//按步长分组[0, gap, 2gap, 3gap],[1, 1 + gap, 1 + 2gap, 3 + 3gap]...
                 for (int m = i; m < length - gap; m += gap) {//在每一个分组中进行排序,从第二个值m开始向前递推比较。比较完后m++
                     for (int j = m + gap; j >= i + gap; j -= gap) {
-                        if (param[j - gap] > param[j]) {//最小坐标为分组起始坐标，最大坐标不大于元数组最大坐标
+                        if (param[j - gap] > param[j]) {//最小坐标为分组起始坐标，最大坐标不大于原数组最大坐标
                             swap(param, j, j - gap);
 
                         }
