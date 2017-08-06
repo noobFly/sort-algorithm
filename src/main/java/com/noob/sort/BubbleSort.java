@@ -1,3 +1,5 @@
+package com.noob.sort;
+
 /**
  * 稳定
  * 冒泡排序： 相邻的两个值比较，将最大/小的值逐步换至队尾/首
@@ -7,6 +9,10 @@ public class BubbleSort extends AbstractSort {
 
     @Override
     public int[] sort(int[] param) {
+        return sort_two(param);
+    }
+
+    public int[] sort_one(int[] param) {
         int count = 0; //已经排序过的次数
         int max_count = param.length - 1;//最大的排序次数
         while (count <= max_count) {
@@ -21,7 +27,7 @@ public class BubbleSort extends AbstractSort {
         return param;
     }
 
-    public int[] sort2(int[] param) {
+    public int[] sort_two(int[] param) {
         int max_count = param.length - 1;//最大下标
         while (max_count > 0) {
             for (int i = 0; i <= max_count - 1; i++) {

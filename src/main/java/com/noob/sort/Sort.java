@@ -1,3 +1,5 @@
+package com.noob.sort;
+
 /**
  * Created by bear on 2016/2/29.
  */
