@@ -12,9 +12,8 @@ public class RadixSort extends AbstractSort {
     private int max_index = 10;
 
     public int[] sort(int[] param) {
-        int end = param.length - 1;
         for (int position = 0; position < 3; position++) {
-            sort_core(param, end, position);
+            sort_core(param, position);
         }
         return param;
     }
@@ -23,10 +22,11 @@ public class RadixSort extends AbstractSort {
      * 按指定位上的数值排序
      *
      * @param param
-     * @param end_index
      * @param position
      */
-    private void sort_core(int[] param, int end_index, int position) {
+    private void sort_core(int[] param,  int position) {
+        int end_index = param.length - 1;
+
         int[] count = new int[max_index];//记录每个桶统计个数
         int[] store = new int[end_index + 1]; // 排序后的数组容器
 
