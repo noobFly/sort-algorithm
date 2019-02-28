@@ -7,13 +7,10 @@
 *.jar
 *.war
 *.ear
-<<<<<<< HEAD
 .classpath
 .project
 .settings/
-=======
 *.imi
->>>>>>> 5e8f8733933c63f017cd63bc5435b912cea211ce
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
