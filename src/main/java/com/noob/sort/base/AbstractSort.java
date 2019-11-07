@@ -1,4 +1,4 @@
-package com.noob.sort;
+package com.noob.sort.base;
 
 /**
  * 关于时间复杂度：
@@ -23,7 +23,7 @@ public abstract class AbstractSort implements Sort {
 
     public void print() {
         StringBuilder str = toString(
-                sort(new int[] { 5, 4, 3, 2, 1, 0, 44, 22, 2, 32, 54, 22, 88, 77, 99, 11, 9, 8, 7, 6, 5, 2, 6, 9, 4, 2,
+                sort(new int[] { 17, 5, 4, 3,  0, 44, 22, 2, 32, 54, 22, 88, 77, 99, 11, 9, 14, 6, 5,  9, 4, 2,
                         5, 6, 4, 9 })).append("-----").append(this.getClass().getName());
         System.out.println(str.toString());
     }

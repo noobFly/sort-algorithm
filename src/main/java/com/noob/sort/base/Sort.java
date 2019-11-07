@@ -1,4 +1,4 @@
-package com.noob.sort;
+package com.noob.sort.base;
 
 /**
  * Created by bear on 2016/2/29.

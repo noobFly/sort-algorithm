@@ -1,5 +1,7 @@
 package com.noob.sort;
 
+import com.noob.sort.base.AbstractSort;
+
 /**
  * 按个位、十位、百位...排序 -----> 当前版本对负值无效
  * <p/>
