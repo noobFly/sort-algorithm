@@ -63,7 +63,7 @@ public abstract class ConsistentHashSelector {
 	private ServiceInvoker selectForKey(long hash) {
 		Map.Entry<Long, ServiceInvoker> entry = virtualServices.tailMap(hash, true).firstEntry();
 		if (entry == null) {
-			entry = virtualServices.firstEntry(); // 默认取第一个
+			entry = virtualServices.firstEntry(); // 超出范围为null则默认取第一个
 		}
 		return entry.getValue();
 	}
