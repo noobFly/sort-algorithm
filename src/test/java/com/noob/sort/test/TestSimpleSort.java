@@ -1,18 +1,18 @@
 package com.noob.sort.test;
 
-import com.noob.sort.BubbleSort;
-import com.noob.sort.HeapSort;
-import com.noob.sort.InsertionSort;
-import com.noob.sort.MergeSort;
-import com.noob.sort.QuickSort;
-import com.noob.sort.RadixSort;
-import com.noob.sort.SelectionSort;
-import com.noob.sort.ShellSort;
+import com.noob.sort.simple.BubbleSort;
+import com.noob.sort.simple.HeapSort;
+import com.noob.sort.simple.InsertionSort;
+import com.noob.sort.simple.MergeSort;
+import com.noob.sort.simple.QuickSort;
+import com.noob.sort.simple.RadixSort;
+import com.noob.sort.simple.SelectionSort;
+import com.noob.sort.simple.ShellSort;
 
 /**
  * Created by bear on 2016/2/29.
  */
-public class TestSort {
+public class TestSimpleSort {
 
 
     public static void main(String[] args) {

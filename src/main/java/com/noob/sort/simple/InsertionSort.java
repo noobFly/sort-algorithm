@@ -1,6 +1,6 @@
-package com.noob.sort;
+package com.noob.sort.simple;
 
-import com.noob.sort.base.AbstractSort;
+import com.noob.sort.simple.base.AbstractSort;
 
 /**
  * 稳定 插入排序 1）将待排序序列第一个元素看做一个有序序列，把第二个元素到最后一个元素当成是未排序序列。

@@ -1,6 +1,6 @@
-package com.noob.sort;
+package com.noob.sort.simple;
 
-import com.noob.sort.base.AbstractSort;
+import com.noob.sort.simple.base.AbstractSort;
 
 /**
  * 稳定

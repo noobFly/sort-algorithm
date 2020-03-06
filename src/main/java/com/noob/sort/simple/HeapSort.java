@@ -1,6 +1,6 @@
-package com.noob.sort;
+package com.noob.sort.simple;
 
-import com.noob.sort.base.AbstractSort;
+import com.noob.sort.simple.base.AbstractSort;
 
 /**
  * 不稳定（因为相同的值最终有可能下标小的先置换到末尾的已排序队列中，可在比较父子节点大小的判断中增加若相等也置换，那应该能达到稳定排序的要求，

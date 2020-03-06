@@ -1,6 +1,6 @@
-package com.noob.sort;
+package com.noob.sort.simple;
 
-import com.noob.sort.base.AbstractSort;
+import com.noob.sort.simple.base.AbstractSort;
 
 /**
  * 不稳定 （每次选择的都是第一次达到最大/最小的值） 选择排序。 选中最大/小值置于已经排序队列的队尾，在未排序队列中递推执行 Created by

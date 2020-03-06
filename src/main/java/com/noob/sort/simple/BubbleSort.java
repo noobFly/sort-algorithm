@@ -1,6 +1,6 @@
-package com.noob.sort;
+package com.noob.sort.simple;
 
-import com.noob.sort.base.AbstractSort;
+import com.noob.sort.simple.base.AbstractSort;
 
 /**
  * 稳定 冒泡排序： 相邻的两个值比较，将最大/小的值逐步换至队尾/首 Created by bear on 2016/3/2.

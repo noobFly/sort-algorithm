@@ -1,6 +1,6 @@
-package com.noob.sort;
+package com.noob.sort.simple;
 
-import com.noob.sort.base.AbstractSort;
+import com.noob.sort.simple.base.AbstractSort;
 
 /**
  * 不稳定（因为每次的排序队列都是在元队列基础上按步长重新分组后的，导致相同值的数位置发生变化。）
