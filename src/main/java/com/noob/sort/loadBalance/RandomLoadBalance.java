@@ -1,12 +1,20 @@
-package com.noob.sort;
+package com.noob.sort.loadBalance;
 
 import java.util.Random;
 import java.util.TreeMap;
 
 /**
- * TreeMap的KEY需要实现{@link Comparable}接口
  * 
- * @author admin
+ * 大致思路是：
+ * <p>
+ * 在横轴上以权重值为定位点，[ 0, 权重累加值 ) 为整个权重范围。 请求hash值落点入横轴。
+ * <p>
+ * [0+weight1+...+weight(N-1), 0+weight1+...+weight(N-1)+weightN ) 标识 weightN被命中
+ * （判定request_hash 落在哪个最小权重点前）
+ * <p>
+ * 与 Random类中的nextInt(n)系列方法生成 [ 0, n) 的伪随机数 的范围有关系
+ * <p>
+ * TreeMap的KEY需要实现{@link Comparable}接口
  *
  */
 public class RandomLoadBalance {
@@ -14,7 +22,6 @@ public class RandomLoadBalance {
 	static double[] weightDouble = new double[] { 0.06, 2.94, 97 };
 	static int[] weightInt = new int[] { 1, 1, 3 };
 
-	/** TreeMap.ceilingKey 返回指定key的项, 如果没有则返回第一个大于指定KEY的 key **/
 	public static void sortByTreeMap() {
 
 		int choose1 = 0, choose2 = 0, choose3 = 0;
@@ -27,9 +34,14 @@ public class RandomLoadBalance {
 		int loop = loop_max;
 
 		while (loop > 0) {
-			double random = (Math.random() * weightTotal);
-			// returns the entry for the least key greater than the specified key
-			Integer index = map.get(map.ceilingKey(random));
+			double random = (Math.random() * weightTotal); // 范围 [ 0, weightTotal )
+
+			/**
+			 * TreeMap.ceilingKey 返回指定key的项, 如果没有则返回第一个大于指定KEY的 key
+			 * <p>
+			 * 但Math.random() [0, 1)， 所以不应该返回相等的key
+			 **/
+			Integer index = map.get(map.tailMap(random, false).firstKey()); // 不包含匹配相等的key
 			if (1 == index) {
 				choose1++;
 			} else if (2 == index) {
@@ -43,17 +55,6 @@ public class RandomLoadBalance {
 		System.out.println(String.format("index1-%s index2-%s index3-%s", choose1, choose2, choose3));
 
 	}
-
-	/**
-	 * 
-	 * 大致思路是：
-	 * <p>
-	 * 在横轴上以权重值为定位点，[ 0, 权重累加值 ] 为随机数范围。 随机值落点入横轴。
-	 * <p>
-	 * ( 0+weight1+...+weight(N-1), 0+weight1+...+weight(N-1)+weightN ] 标识
-	 * weightN被命中
-	 *
-	 */
 
 	/**
 	 * 1）假设有四个集群节点A,B,C,D,对应的权重分别是1,2,3,4,
@@ -88,7 +89,7 @@ public class RandomLoadBalance {
 				int offset = random.nextInt(totalWeight);
 				for (int i = 0; i < length; i++) {
 					offset -= weightInt[i];
-					if (offset < 0) {
+					if (offset < 0) { // Random类中的nextInt(n)系列方法生成 [ 0, n ) 的伪随机正整数;  所以 offset == 0 时, 应该再递推后一个index
 						index = i;
 						break;
 					}

@@ -1,16 +1,20 @@
 package com.noob.sort.test;
 
 import java.util.List;
+import java.util.Random;
+import java.util.TreeMap;
 
 import com.google.common.collect.Lists;
-import com.noob.sort.ConsistentHashLoadBalance;
-import com.noob.sort.ConsistentHashLoadBalance.ServiceInvoker;
-import com.noob.sort.RandomLoadBalance;
+import com.noob.sort.loadBalance.ConsistentHashLoadBalance;
+import com.noob.sort.loadBalance.RandomLoadBalance;
+import com.noob.sort.loadBalance.ServiceInvoker;
 
 public class TestLoadBalance {
 	public static void main(String[] args) {
 		testRandomLoadBalance();
 		testConsistentHashLoadBalance();
+		testTreeMap();
+		testRandom();
 	}
 
 	private static void testRandomLoadBalance() {
@@ -30,12 +34,52 @@ public class TestLoadBalance {
 
 			for (int i = 0; i < ServiceIps.length; i++) {
 				invokerList.add(ServiceInvoker.builder().serviceIp(ServiceIps[i]).methodName(methodNames[j])
-						.arguments(params[j]).hashArguments("0,1").serviceKey("testDubboConsistentHashLoadBalance")
-						.build()); // 同一次的loadBalance的多个invokers除服务提供者不一样，其他的应该是相同的
+						.hashArguments("0,1").applicationName("testDubbo").build()); // 同一次的loadBalance的多个invokers除服务提供者不一样，其他的应该是相同的
 			}
 
-			System.out.println(consistentHashLoadBalance.doSelect(invokerList).getServiceIp());
+			System.out.println(consistentHashLoadBalance.doSelect(invokerList, params[j]).getServiceIp());
 		}
 
+	}
+
+	/**
+	 * ceilingKey & ceilingEntry : 优先返回指定key, 若没有返回大于且最近的key。如果超出最大key值， 返回null.
+	 * <p>
+	 * tailMap : ture or false 标识决定是否返回相等
+	 */
+	private static void testTreeMap() {
+		TreeMap<Integer, String> map = new TreeMap<Integer, String>();
+		map.put(2, "F1");
+		map.put(8, "F3");
+		map.put(5, "F2");
+
+		System.out.println(map.ceilingEntry(1)); // 2=F1
+		System.out.println(map.ceilingEntry(2)); // 2=F1
+		System.out.println(map.ceilingEntry(16)); // null
+		System.out.println(map.ceilingEntry(6)); // 8=F3
+
+		System.out.println(map.tailMap(2, false).firstEntry()); // 5=F2
+		System.out.println(map.tailMap(2, true).firstEntry()); // 2=F1
+		System.out.println(map.tailMap(8, false).firstEntry()); // null
+		System.out.println(map.tailMap(8, true).firstEntry()); // 8=F3 ture or false 标识决定是否返回相等
+
+		System.out.println(map.tailMap(16, true).firstEntry()); // null
+		System.out.println(map.tailMap(16, false).firstEntry()); // null
+
+	}
+
+	/**
+	 * Random类中的nextInt(n)系列方法生成[0, n)的伪随机数;; nextInt()方法会产生所有(32位)有效的整数，所以会有负数。
+	 * <p>
+	 * Math.random() 的范围是 [0, 1);
+	 */
+	private static void testRandom() {
+		Random random = new Random();
+		for (int i = 0; i < 100; i++) {
+			System.out.println(random.nextInt()); // 出现负数
+		}
+		for (int i = 0; i < 100; i++) {
+			System.out.println(Math.random()); // [0, 1)
+		}
 	}
 }
