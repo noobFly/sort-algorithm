@@ -65,7 +65,7 @@ public class TestLoadBalance {
 	/**
 	 * ceilingKey & ceilingEntry : 优先返回指定key, 若没有返回大于且最近的key。如果超出最大key值， 返回null.
 	 * <p>
-	 * tailMap : ture or false 标识决定是否返回相等
+	 * tailMap : ture or false 标识决定是否返回相等Key的项
 	 */
 	private static void testTreeMap() {
 		TreeMap<Integer, String> map = new TreeMap<Integer, String>();
@@ -79,9 +79,9 @@ public class TestLoadBalance {
 		System.out.println(map.ceilingEntry(6)); // 8=F3
 
 		System.out.println(map.tailMap(2, false).firstEntry()); // 5=F2
-		System.out.println(map.tailMap(2, true).firstEntry()); // 2=F1
+		System.out.println(map.tailMap(-2, true).firstEntry()); // 2=F1
 		System.out.println(map.tailMap(8, false).firstEntry()); // null
-		System.out.println(map.tailMap(8, true).firstEntry()); // 8=F3 ture or false 标识决定是否返回相等
+		System.out.println(map.tailMap(8, true).firstEntry()); // 8=F3
 
 		System.out.println(map.tailMap(16, true).firstEntry()); // null
 		System.out.println(map.tailMap(16, false).firstEntry()); // null
