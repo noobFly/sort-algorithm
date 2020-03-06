@@ -7,14 +7,19 @@ import java.util.TreeMap;
 import com.google.common.collect.Lists;
 import com.noob.sort.loadBalance.ConsistentHashLoadBalance;
 import com.noob.sort.loadBalance.RandomLoadBalance;
+import com.noob.sort.loadBalance.RoundRobinLoadBalance;
 import com.noob.sort.loadBalance.ServiceInvoker;
 
 public class TestLoadBalance {
+
+	static String[] ServiceIps = new String[] { "127.0.0.1:8080", "189.84.255.216:8080", "172.164.11.144:8080" };
+
 	public static void main(String[] args) {
 		testRandomLoadBalance();
 		testConsistentHashLoadBalance();
-		testTreeMap();
-		testRandom();
+		testRoundRobinLoadBalance();
+		// testTreeMap();
+		// testRandom();
 	}
 
 	private static void testRandomLoadBalance() {
@@ -23,11 +28,11 @@ public class TestLoadBalance {
 	}
 
 	private static void testConsistentHashLoadBalance() {
-		ConsistentHashLoadBalance consistentHashLoadBalance = new ConsistentHashLoadBalance();
-		String[] ServiceIps = new String[] { "127.0.0.1:8080", "189.84.255.216:8080", "172.164.11.144:8080" };
+		ConsistentHashLoadBalance loadBalance = new ConsistentHashLoadBalance();
 		Object[][] params = new Object[][] { { "noticeID_2354", "WEIXIN", "10", "100" },
 				{ "interestID_1313", "WEIBO", "3", "20" }, { "historyID_9876", "ZHIHU", "2", "10" },
 				{ "forkID_5476", "DOUXIN", "29", "10" } };
+
 		String[] methodNames = new String[] { "queryNotice", "queryInterest", "queryHistory", "queryFork" };
 		for (int j = 0; j < params.length; j++) {
 			List<ServiceInvoker> invokerList = Lists.newArrayList();
@@ -37,7 +42,22 @@ public class TestLoadBalance {
 						.hashArguments("0,1").applicationName("testDubbo").build()); // 同一次的loadBalance的多个invokers除服务提供者不一样，其他的应该是相同的
 			}
 
-			System.out.println(consistentHashLoadBalance.doSelect(invokerList, params[j]).getServiceIp());
+			System.out.println(loadBalance.select(invokerList, params[j]).getServiceIp());
+		}
+
+	}
+
+	private static void testRoundRobinLoadBalance() {
+		RoundRobinLoadBalance loadBalance = new RoundRobinLoadBalance();
+		for (int j = 0; j < 100; j++) {
+			List<ServiceInvoker> invokerList = Lists.newArrayList();
+
+			for (int i = 0; i < ServiceIps.length; i++) {
+				invokerList.add(ServiceInvoker.builder().serviceIp(ServiceIps[i]).methodName("queryNotice")
+						.hashArguments("0,1").applicationName("testDubbo").weight(i + 1).build());
+			}
+
+			System.out.println(loadBalance.select(invokerList, null).getServiceIp());
 		}
 
 	}
