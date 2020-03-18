@@ -1,4 +1,4 @@
-package com.noob.sort.loadBalance;
+package com.noob.sort.loadBalance.spi;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -7,7 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.noob.sort.loadBalance.base.AbstractLoadBalance;
+import com.noob.sort.loadBalance.AbstractLoadBalance;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,6 +15,10 @@ import lombok.Data;
 /**
  * 
  * 轮询
+ * <p>
+ * 与RandomLoadBalance的核心处理逻辑是一样的
+ * <p>
+ * 只是轮询的基准数是访问次数AtomicInteger, 随机负载算法则是一个随机数字
  * <p>
  * 需要注意权重表示范围的边界
  * 

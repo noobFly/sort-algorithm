@@ -1,4 +1,4 @@
-package com.noob.sort.loadBalance.base;
+package com.noob.sort.loadBalance;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

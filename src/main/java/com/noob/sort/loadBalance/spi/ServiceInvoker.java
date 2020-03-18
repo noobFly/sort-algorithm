@@ -1,4 +1,4 @@
-package com.noob.sort.loadBalance;
+package com.noob.sort.loadBalance.spi;
 
 import lombok.Builder;
 import lombok.Data;

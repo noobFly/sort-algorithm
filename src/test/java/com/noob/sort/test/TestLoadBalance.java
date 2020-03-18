@@ -1,25 +1,43 @@
 package com.noob.sort.test;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import java.util.ServiceLoader;
 import java.util.TreeMap;
 
 import com.google.common.collect.Lists;
-import com.noob.sort.loadBalance.ConsistentHashLoadBalance;
-import com.noob.sort.loadBalance.RandomLoadBalance;
-import com.noob.sort.loadBalance.RoundRobinLoadBalance;
-import com.noob.sort.loadBalance.ServiceInvoker;
+import com.noob.sort.loadBalance.LoadBalance;
+import com.noob.sort.loadBalance.spi.ConsistentHashLoadBalance;
+import com.noob.sort.loadBalance.spi.RandomLoadBalance;
+import com.noob.sort.loadBalance.spi.RoundRobinLoadBalance;
+import com.noob.sort.loadBalance.spi.ServiceInvoker;
 
 public class TestLoadBalance {
 
 	static String[] ServiceIps = new String[] { "127.0.0.1:8080", "189.84.255.216:8080", "172.164.11.144:8080" };
 
 	public static void main(String[] args) {
-		testRandomLoadBalance();
-		testConsistentHashLoadBalance();
-		testRoundRobinLoadBalance();
+		// testRandomLoadBalance();
+		// testConsistentHashLoadBalance();
+		// testRoundRobinLoadBalance();
 		// testTreeMap();
 		// testRandom();
+		 testSPI();
+	}
+
+	private static void testSPI() {
+		Iterator<LoadBalance> providers = sun.misc.Service.providers(LoadBalance.class);
+		ServiceLoader<LoadBalance> load = ServiceLoader.load(LoadBalance.class);
+		while (providers.hasNext()) {
+			LoadBalance ser = providers.next();
+			System.out.println(ser.getClass());
+		}
+		Iterator<LoadBalance> iterator = load.iterator();
+		while (iterator.hasNext()) {
+			LoadBalance ser = iterator.next();
+			System.out.println(ser.getClass());
+		}
 	}
 
 	private static void testRandomLoadBalance() {

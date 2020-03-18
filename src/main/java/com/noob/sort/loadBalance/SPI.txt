@@ -1,0 +1,11 @@
+SPI ，全称为 Service Provider Interface，是一种服务发现机制。它通过在ClassPath路径下的META-INF/services文件夹查找文件，自动加载文件里所定义的类。
+在ClassPath路径下配置添加一个文件,文件名字是接口的全限定类名，内容是实现类的全限定类名，多个实现类用换行符分隔。
+
+可以通过ServiceLoader.load或者Service.providers方法通过反射Class.forName 拿到实现类的实例。
+其中，Service.providers包位于sun.misc.Service，而ServiceLoader.load包位于java.util.ServiceLoader。
+
+在dubbo、JDBC中都使用到了SPI机制;
+dubbo：
+   ExtensionLoader利用了SPI的思想来处理，不同的是：dubbo自定义了文件路径,文件内容改为了 key=value,便于在加载时对异常原因日志的精准输出， 详见@SPI 的注释
+JDBC： 
+   DriverManager.loadInitialDrivers()加载数据库驱动. Driver接口的包为:java.sql.Driver, 所以它要找的就是META-INF/services/java.sql.Driver文件

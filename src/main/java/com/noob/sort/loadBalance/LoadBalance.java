@@ -1,8 +1,8 @@
-package com.noob.sort.loadBalance.base;
+package com.noob.sort.loadBalance;
 
 import java.util.List;
 
-import com.noob.sort.loadBalance.ServiceInvoker;
+import com.noob.sort.loadBalance.spi.ServiceInvoker;
 
 @SPI
 public interface LoadBalance {

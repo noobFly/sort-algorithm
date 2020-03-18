@@ -1,4 +1,4 @@
-package com.noob.sort.loadBalance;
+package com.noob.sort.loadBalance.spi;
 
 import java.util.Random;
 import java.util.TreeMap;

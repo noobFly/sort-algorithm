@@ -1,4 +1,4 @@
-package com.noob.sort.loadBalance;
+package com.noob.sort.loadBalance.spi;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
@@ -68,10 +68,11 @@ public abstract class ConsistentHashSelector {
 		return entry.getValue();
 	}
 
+	 //MD5 加密后的位数一般为两种，16 位与 32 位。16 位实际上是从 32 位字符串中，取中间的第 9 位到第 24 位的部分
 	public static byte[] md5(String key) {
 		MessageDigest md5;
 		try {
-			md5 = MessageDigest.getInstance("MD5");
+			md5 = MessageDigest.getInstance("MD5");// 16位
 		} catch (NoSuchAlgorithmException e) {
 			throw new IllegalStateException(e.getMessage(), e);
 		}

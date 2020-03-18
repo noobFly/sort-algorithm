@@ -1,10 +1,10 @@
-package com.noob.sort.loadBalance;
+package com.noob.sort.loadBalance.spi;
 
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import com.noob.sort.loadBalance.base.AbstractLoadBalance;
+import com.noob.sort.loadBalance.AbstractLoadBalance;
 
 /**
  * 一致性hash 参考： https://www.cnkirito.moe/consistent-hash-lb/
