@@ -1,4 +1,4 @@
-package com.noob.sort.loadBalance.spi;
+package com.noob.sort.loadBalance.impl;
 
 import java.util.Random;
 import java.util.TreeMap;
@@ -10,9 +10,17 @@ import java.util.TreeMap;
  * 在横轴上以权重值为定位点，[ 0, 权重累加值 ) 为整个权重范围。 请求hash值落点入横轴。
  * <p>
  * [0+weight1+...+weight(N-1), 0+weight1+...+weight(N-1)+weightN ) 标识 weightN被命中
- * （判定request_hash 落在哪个最小权重点前）
+ * （判定请求的随机数 落在哪个最小权重点前）
  * <p>
  * 与 Random类中的nextInt(n)系列方法生成 [ 0, n) 的伪随机数 的范围有关系
+ * <p>
+ * eg.推论
+ * <p>
+ * weight - > 3, 5, 2 =》 权重点是： 3, 8 , 10
+ * <p>
+ * 用 Math.nextInt(10) 生成随机整数范围是 [ 0, 10)
+ * <p>
+ * 则分别对应的 {0,1,2}, {3,4,5,6,7},{8,9} 权重范围是 [0, 3) , [3,8), [8,10) 左闭右开
  * <p>
  * TreeMap的KEY需要实现{@link Comparable}接口
  *
@@ -37,9 +45,9 @@ public class RandomLoadBalance {
 			double random = (Math.random() * weightTotal); // 范围 [ 0, weightTotal )
 
 			/**
-			 * TreeMap.ceilingKey 返回指定key的项, 如果没有则返回第一个大于指定KEY的 key
+			 * TreeMap.ceilingKey 返回最小的 大于或等于 入参key的key值, 如果没有返回null。
 			 * <p>
-			 * 但Math.random() [0, 1)， 所以不应该返回相等的key
+			 * 但Math.random() [0, 1) 是 左开右闭， 所以不应该返回相等的key。
 			 **/
 			Integer index = map.get(map.tailMap(random, false).firstKey()); // 不包含匹配相等的key
 			if (1 == index) {
@@ -89,7 +97,8 @@ public class RandomLoadBalance {
 				int offset = random.nextInt(totalWeight);
 				for (int i = 0; i < length; i++) {
 					offset -= weightInt[i];
-					if (offset < 0) { // Random类中的nextInt(n)系列方法生成 [ 0, n ) 的伪随机正整数;  所以 offset == 0 时, 应该再递推后一个index
+					if (offset < 0) { // Random类中的nextInt(n)系列方法生成 [ 0, n ) 的伪随机正整数; 所以 offset == 0 时, 应该再递推后一个index
+										// (见类注释推论)
 						index = i;
 						break;
 					}

@@ -1,4 +1,4 @@
-package com.noob.sort.loadBalance.spi;
+package com.noob.sort.loadBalance.impl;
 
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;

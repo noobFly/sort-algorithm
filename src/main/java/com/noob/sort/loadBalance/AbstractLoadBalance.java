@@ -2,7 +2,7 @@ package com.noob.sort.loadBalance;
 
 import java.util.List;
 
-import com.noob.sort.loadBalance.spi.ServiceInvoker;
+import com.noob.sort.loadBalance.impl.ServiceInvoker;
 
 public abstract class AbstractLoadBalance implements LoadBalance {
 

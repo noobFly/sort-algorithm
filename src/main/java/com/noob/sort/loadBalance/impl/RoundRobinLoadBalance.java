@@ -1,4 +1,4 @@
-package com.noob.sort.loadBalance.spi;
+package com.noob.sort.loadBalance.impl;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -18,7 +18,7 @@ import lombok.Data;
  * <p>
  * 与RandomLoadBalance的核心处理逻辑是一样的
  * <p>
- * 只是轮询的基准数是访问次数AtomicInteger, 随机负载算法则是一个随机数字
+ * 只是轮询的基准数是访问次数累加AtomicInteger, 随机负载算法则是一个随机数字
  * <p>
  * 需要注意权重表示范围的边界
  * 

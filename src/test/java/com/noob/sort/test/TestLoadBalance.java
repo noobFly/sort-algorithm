@@ -1,17 +1,15 @@
 package com.noob.sort.test;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import java.util.ServiceLoader;
 import java.util.TreeMap;
 
 import com.google.common.collect.Lists;
-import com.noob.sort.loadBalance.LoadBalance;
-import com.noob.sort.loadBalance.spi.ConsistentHashLoadBalance;
-import com.noob.sort.loadBalance.spi.RandomLoadBalance;
-import com.noob.sort.loadBalance.spi.RoundRobinLoadBalance;
-import com.noob.sort.loadBalance.spi.ServiceInvoker;
+import com.noob.sort.loadBalance.LoadBalanceSpi;
+import com.noob.sort.loadBalance.impl.ConsistentHashLoadBalance;
+import com.noob.sort.loadBalance.impl.RandomLoadBalance;
+import com.noob.sort.loadBalance.impl.RoundRobinLoadBalance;
+import com.noob.sort.loadBalance.impl.ServiceInvoker;
 
 public class TestLoadBalance {
 
@@ -20,24 +18,14 @@ public class TestLoadBalance {
 	public static void main(String[] args) {
 		// testRandomLoadBalance();
 		// testConsistentHashLoadBalance();
-		// testRoundRobinLoadBalance();
+		testRoundRobinLoadBalance();
 		// testTreeMap();
 		// testRandom();
-		 testSPI();
+		// testSPI();
 	}
 
 	private static void testSPI() {
-		Iterator<LoadBalance> providers = sun.misc.Service.providers(LoadBalance.class);
-		ServiceLoader<LoadBalance> load = ServiceLoader.load(LoadBalance.class);
-		while (providers.hasNext()) {
-			LoadBalance ser = providers.next();
-			System.out.println(ser.getClass());
-		}
-		Iterator<LoadBalance> iterator = load.iterator();
-		while (iterator.hasNext()) {
-			LoadBalance ser = iterator.next();
-			System.out.println(ser.getClass());
-		}
+		LoadBalanceSpi.spiInfo();
 	}
 
 	private static void testRandomLoadBalance() {
@@ -72,7 +60,7 @@ public class TestLoadBalance {
 
 			for (int i = 0; i < ServiceIps.length; i++) {
 				invokerList.add(ServiceInvoker.builder().serviceIp(ServiceIps[i]).methodName("queryNotice")
-						.hashArguments("0,1").applicationName("testDubbo").weight(i + 1).build());
+						.hashArguments("0,1").applicationName("testDubbo").weight(ServiceIps.length - i).build());
 			}
 
 			System.out.println(loadBalance.select(invokerList, null).getServiceIp());
