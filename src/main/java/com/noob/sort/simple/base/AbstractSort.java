@@ -15,7 +15,7 @@ package com.noob.sort.simple.base;
  * <p/>
  * 稳定的排序算法：冒泡排序、插入排序、归并排序和基数排序
  * <p/>
- * 不是稳定的排序算法：选择排序、快速排序、希尔排序、堆排序 Created by bear on 2016/2/29.
+ * 不稳定的排序算法：选择排序、快速排序、希尔排序、堆排序 Created by bear on 2016/2/29.
  */
 public abstract class AbstractSort implements Sort {
 
