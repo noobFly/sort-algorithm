@@ -219,7 +219,7 @@ public class NumToCapitalChineseUtil {
 	 * @param chnAmt
 	 * @return
 	 */
-	public static String toSimplified(String chnAmt) {
+	private static String toSimplified(String chnAmt) {
 
 		if (StringUtils.isBlank(chnAmt)) {
 			return null;
@@ -259,6 +259,7 @@ public class NumToCapitalChineseUtil {
 	
 	public static void main(String[] args) {
 		System.out.println(toChinese("123456789.12345"));
+
 	}
 
 }
