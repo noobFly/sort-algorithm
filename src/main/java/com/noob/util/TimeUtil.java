@@ -1,4 +1,4 @@
-package com.noob.repayPlan;
+package com.noob.util;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
