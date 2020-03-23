@@ -1,9 +1,27 @@
 package com.noob.repayPlan;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 public interface TimeUtil {
+	/**
+	 * 日期格式化
+	 * 
+	 * @param date   格式化的日期
+	 * @param format 格式
+	 * @return
+	 */
+	public static String formatDate(Date date, String format) {
+		try {
+			DateFormat df = new SimpleDateFormat(format);
+			return df.format(date);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}	
+
 	public static int getBetweenDays(Date fDate, Date sDate) {
 		return (int) ((fDate.getTime() - sDate.getTime()) / 86400000L);// (24小时 * 60分 * 60秒 * 1000毫秒= 1天毫秒数)
 	}
