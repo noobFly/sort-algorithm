@@ -1,4 +1,4 @@
-package com.noob.contract.sign.domain;
+package com.noob.sign.domain;
 
 import lombok.Data;
 

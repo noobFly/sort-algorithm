@@ -1,8 +1,8 @@
-package com.noob.contract.sign;
+package com.noob.sign;
 
 import java.util.Map;
 
-import com.noob.contract.sign.domain.ApplyLimit;
+import com.noob.sign.domain.ApplyLimit;
 
 /**
  * 

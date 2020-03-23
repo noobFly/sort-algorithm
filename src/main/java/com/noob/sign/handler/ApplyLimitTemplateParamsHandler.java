@@ -1,10 +1,10 @@
-package com.noob.contract.sign.handler;
+package com.noob.sign.handler;
 
 import java.util.Map;
 
-import com.noob.contract.sign.domain.ApplyLimit;
-import com.noob.contract.sign.domain.Customer;
-import com.noob.contract.sign.domain.TemplateInput;
+import com.noob.sign.domain.ApplyLimit;
+import com.noob.sign.domain.Customer;
+import com.noob.sign.domain.TemplateInput;
 
 /**
  * 子类如果有构造函数，需要调super();

@@ -1,8 +1,8 @@
-package com.noob.contract.sign.handler;
+package com.noob.sign.handler;
 
 import java.util.Map;
 
-import com.noob.contract.sign.domain.TemplateInput;
+import com.noob.sign.domain.TemplateInput;
 
 /**
  * 输入合同/协议模板参数（域对象.成员变量），输出 域对象.成员变量：参数值 的键值对

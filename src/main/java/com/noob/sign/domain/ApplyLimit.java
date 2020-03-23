@@ -1,5 +1,5 @@
 
-package com.noob.contract.sign.domain;
+package com.noob.sign.domain;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;

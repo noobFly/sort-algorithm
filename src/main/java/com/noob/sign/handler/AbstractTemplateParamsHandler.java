@@ -1,4 +1,4 @@
-package com.noob.contract.sign.handler;
+package com.noob.sign.handler;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -7,8 +7,8 @@ import java.util.function.Supplier;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import com.noob.contract.sign.domain.Customer;
-import com.noob.contract.sign.domain.TemplateInput;
+import com.noob.sign.domain.Customer;
+import com.noob.sign.domain.TemplateInput;
 
 public abstract class AbstractTemplateParamsHandler implements TemplateParamsHandler {
 	// 按线程缓存

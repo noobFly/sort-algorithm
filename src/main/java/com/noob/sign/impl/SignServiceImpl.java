@@ -1,12 +1,12 @@
-package com.noob.contract.sign.impl;
+package com.noob.sign.impl;
 
 import java.util.Map;
 
-import com.noob.contract.sign.SignService;
-import com.noob.contract.sign.domain.ApplyLimit;
-import com.noob.contract.sign.domain.TemplateInput;
-import com.noob.contract.sign.handler.ApplyLimitTemplateParamsHandler;
-import com.noob.contract.sign.handler.TemplateParamsHandler;
+import com.noob.sign.SignService;
+import com.noob.sign.domain.ApplyLimit;
+import com.noob.sign.domain.TemplateInput;
+import com.noob.sign.handler.ApplyLimitTemplateParamsHandler;
+import com.noob.sign.handler.TemplateParamsHandler;
 
 public class SignServiceImpl implements SignService {
 
