@@ -1,0 +1,2 @@
+com.noob.loadBalance.impl.RoundRobinLoadBalance
+com.noob.loadBalance.impl.ConsistentHashLoadBalance
