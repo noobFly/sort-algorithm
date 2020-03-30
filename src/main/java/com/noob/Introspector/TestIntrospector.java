@@ -36,7 +36,16 @@ public class TestIntrospector {
 
 	}
 
-	// 即使没有成员变量age,但又成员方法setAge。 内省的结果里： getName() 返回age。 getWriteMethod()返回setAge
+	/**
+	 * 即使没有成员变量age
+	 * <p>
+	 * 有成员方法setAge： 内省结果： PropertyDescriptor.getName() 返回age。
+	 * PropertyDescriptor.getWriteMethod()返回setAge
+	 * <p>
+	 * 有成员方法getAmount： 内省结果： PropertyDescriptor.getName()
+	 * 返回amount。propertyDescriptor.getReadMethod()返回getAmount
+	 *
+	 */
 	public static class School {
 
 		private String name;
@@ -50,12 +59,12 @@ public class TestIntrospector {
 			this.name = name;
 		}
 
-		/*
-		 * public void setAge(int age) { this.level = age; }
-		 */
-		
-		public void setAmount(int age) {
+		public void setAge(int age) {
 			this.level = age;
+		}
+
+		public int getAmount() {
+			return 1;
 		}
 	}
 
