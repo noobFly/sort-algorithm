@@ -21,7 +21,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 /**
- * 
+ * 分表sql的创建
  * <dependency> <groupId>com.alibaba</groupId> <artifactId>druid</artifactId>
  * <version>1.1.6</version> </dependency>
  *

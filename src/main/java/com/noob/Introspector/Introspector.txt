@@ -1,0 +1,32 @@
+https://mp.weixin.qq.com/s/FAYHhBr6jC6RMBbFyW5D2g
+
+java.beans.Introspector是一个专门处理JavaBean的工具类，用来获取JavaBean里描述符号。
+相关类有BeanInfo、PropertyDescriptor，MethodDescriptor、BeanDescriptor、EventSetDescriptor和ParameterDescriptor。
+
+如果是严格的JavaBean(Field名称不重复，并且Field具备Setter和Getter方法)，
+它的PropertyDescriptor会通过解析Setter和Getter方法，合并解析结果，最终得到对应的PropertyDescriptor实例。
+所以PropertyDescriptor包含了属性名称和属性的Setter和Getter方法(如果存在的话)。
+
+内省Introspector和反射Reflection的区别
+Reflection：
+反射就是运行时获取一个类的所有信息，可以获取到类的所有定义的信息（包括成员变量，成员方法，构造器等）可以操纵类的字段、方法、构造器等部分。反射获取到的类信息是必定正确的。
+Introspector：
+内省基于反射实现，主要用于操作JavaBean，基于JavaBean的规范进行Bean信息描述符的解析，依据于类的Setter和Getter方法，可以获取到类的描述符。不一定是正确的(如果一个类中的属性没有Setter和Getter方法，无法使用内省)。
+
+通过BeanInfo#getPropertyDescriptors()获取到的PropertyDescriptor数组中，除了Bean属性的之外，还会带有一个属性名为class的PropertyDescriptor实例，
+它的来源是Class的getClass方法，如果不需要这个属性那么最好判断后过滤。
+
+PropertyDescriptor类表示JavaBean类通过存储器(Setter和Getter)导出一个属性，它应该是内省体系中最常见的类。主要方法：
+synchronized Class getPropertyType()：获得属性的Class对象。
+synchronized Method getReadMethod()：获得用于读取属性值的方法；
+synchronized Method getWriteMethod()：获得用于写入属性值的方法。
+int hashCode()：获取对象的哈希值。
+synchronized void setReadMethod(Method readMethod)：设置用于读取属性(Getter)值的方法。
+synchronized void setWriteMethod(Method writeMethod)：设置用于写入属性值(Setter)的方法。
+
+
+回收：
+如果框架或者程序用到了JavaBeans Introspector，那么就相当于启用了一个系统级别的缓存，这个缓存会存放一些曾加载并分析过的Javabean的引用。
+当web服务器关闭的时候，由于这个缓存中存放着这些Javabean的引用，所以垃圾回收器不能对Web容器中的JavaBean对象进行回收，导致内存越来越大。
+还有一点值得注意，清除Introspector缓存的唯一方式是刷新整个缓存缓冲区，这是因为JDK没法判断哪些是属于当前的应用的引用，所以刷新整个Introspector缓存缓冲区会导致把服务器的所有应用的Introspector缓存都删掉。
+Spring中提供的org.springframework.web.util.IntrospectorCleanupListener就是为了解决这个问题，它会在Web服务器停止的时候，清理一下这个Introspector缓存，使那些Javabean能被垃圾回收器正确回收。
