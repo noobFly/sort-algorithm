@@ -9,13 +9,15 @@ import java.util.function.Supplier;
 /**
  * 内省
  * <p>
- * PropertyDescriptor会通过解析public的
- * Setter及Getter方法（含父类），合并解析结果，最终得到对应的PropertyDescriptor实例。
+ * PropertyDescriptor会通过解析public （含父类）的 Setter及Getter方法（任何一个匹配语法规范即可），合并解析结果最终得到对应的PropertyDescriptor实例。
  * <P>
- * 以 public的Getter、Setter成员方法 为准， 不管成员变量有没有
+ * 以 public的Getter、Setter成员方法 为准， 不管成员变量有没有。
  * <p>
  * 除了Bean属性的之外，还会带有一个属性名为class的PropertyDescriptor实例，它的来源是Class的getClass方法
- * 
+ * <p>
+ * Getter: 返回一定非void, 方法入参可选.
+ * <p>
+ * Setter: 返回一定是void, 一定要有方法入参.
  *
  */
 public class TestIntrospector {
@@ -47,17 +49,53 @@ public class TestIntrospector {
 
 	}
 
+	/**
+		Name:   age
+		WriteMethod:   setAge
+		ReadMethod:   java.lang.NullPointerException
+		=======================
+		Name:   class
+		WriteMethod:   java.lang.NullPointerException
+		ReadMethod:   getClass
+		=======================
+		Name:   day
+		WriteMethod:   java.lang.NullPointerException
+		ReadMethod:   java.lang.NullPointerException
+		=======================
+		Name:   month
+		WriteMethod:   setMonth
+		ReadMethod:   java.lang.NullPointerException
+		=======================
+		Name:   parentAddress
+		WriteMethod:   setParentAddress
+		ReadMethod:   java.lang.NullPointerException
+		=======================
+		Name:   parentAmount
+		WriteMethod:   java.lang.NullPointerException
+		ReadMethod:   getParentAmount
+		=======================
+		Name:   title
+		WriteMethod:   setTitle
+		ReadMethod:   getTitle
+		=======================
+
+	 * 
+	 */
+
 	public static class School {
 		protected int level;
 
+		// success
 		public int getParentAmount() {
 			return 1;
 		}
 
-		public int getParentAddress() {
-			return this.level;
+		// success
+		public void setParentAddress(String str) {
+			this.level = 2;
 		}
 
+		// protected fail
 		protected int getParentCity() {
 			return this.level;
 		}
@@ -67,25 +105,47 @@ public class TestIntrospector {
 
 		private String title;
 
+		// success
 		public void setAge(int age) {
 			this.level = age;
 		}
 
+		// 非Setter语法 fail
+		public void setParentNo() {
+
+		}
+
+		// 非Setter语法 fail
+		public String setMin(String no) {
+			return no;
+		}
+
+		// success
+		public int getDay(int no) {
+			return no;
+		}
+
+		// 非严格Getter语法 fail
+		public void getYear(int no) {
+
+		}
+
+		// success
 		public String getTitle() {
 			return title;
 		}
 
-		public void setTitle(String title) {
-			this.title = title;
-		}
 
+		// private fail
 		private int getLevel() {
 			return this.level;
 		}
 
+		// default fail
 		int getFun() {
 			return 1;
 		}
+
 	}
 
 }
