@@ -4,7 +4,7 @@ java.beans.Introspector是一个专门处理JavaBean的工具类，用来获取J
 相关类有BeanInfo、PropertyDescriptor，MethodDescriptor、BeanDescriptor、EventSetDescriptor和ParameterDescriptor。
 
 如果是严格的JavaBean(Field名称不重复，并且Field具备Setter和Getter方法)，
-它的PropertyDescriptor会通过解析Setter和Getter方法，合并解析结果，最终得到对应的PropertyDescriptor实例。
+它的PropertyDescriptor会通过解析public的Setter & Getter 方法（含父类），合并解析结果，最终得到对应的PropertyDescriptor实例。
 所以PropertyDescriptor包含了属性名称和属性的Setter和Getter方法(如果存在的话)。
 
 内省Introspector和反射Reflection的区别
