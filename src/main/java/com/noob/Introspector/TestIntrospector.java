@@ -62,10 +62,6 @@ public class TestIntrospector {
 		WriteMethod:   java.lang.NullPointerException
 		ReadMethod:   java.lang.NullPointerException
 		=======================
-		Name:   month
-		WriteMethod:   setMonth
-		ReadMethod:   java.lang.NullPointerException
-		=======================
 		Name:   parentAddress
 		WriteMethod:   setParentAddress
 		ReadMethod:   java.lang.NullPointerException
@@ -75,9 +71,10 @@ public class TestIntrospector {
 		ReadMethod:   getParentAmount
 		=======================
 		Name:   title
-		WriteMethod:   setTitle
+		WriteMethod:   java.lang.NullPointerException
 		ReadMethod:   getTitle
 		=======================
+
 
 	 * 
 	 */
@@ -116,7 +113,7 @@ public class TestIntrospector {
 		}
 
 		// 非Setter语法 fail
-		public String setMin(String no) {
+		public String setMonth(String no) {
 			return no;
 		}
 
