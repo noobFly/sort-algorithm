@@ -12,7 +12,7 @@ import com.google.common.hash.Hashing;
 
 import lombok.Getter;
 /**
- * Hash算法需要变化足够激烈, 相似的字符串如“abc”和“abd”能够均匀散落在哈希环上
+ * Hash算法不仅要快且要变化足够激烈, 相似的字符串如“abc”和“abd”能够均匀散落在哈希环上
  *
  */
 @Getter
