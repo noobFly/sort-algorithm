@@ -16,7 +16,7 @@ import java.util.TreeMap;
  * <p>
  * eg.推论
  * <p>
- * weight - > 3, 5, 2 =》 权重点是： 3, 8 , 10
+ * weight - > 3, 5, 2 =》 权重点是： 3, 8 , 10 
  * <p>
  * 用 Math.nextInt(10) 生成随机整数范围是 [ 0, 10)
  * <p>

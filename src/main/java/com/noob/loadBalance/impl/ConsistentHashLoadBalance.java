@@ -36,9 +36,8 @@ public class ConsistentHashLoadBalance extends AbstractLoadBalance {
 		String key = serviceInvoker.getKey();
 		ConsistentHashSelector selector = (ConsistentHashSelector) selectorCache.get(key);
 		if (selector == null || selector.getIdentityHashCode() != identityHashCode) {
-			// selector = ConsistentHashSelector.newMurmurSelector(invokerList,
-			// identityHashCode);
-			selector = ConsistentHashSelector.newketamaSelector(invokerList, identityHashCode);
+			 selector = ConsistentHashSelector.newMurmurSelector(invokerList, identityHashCode);
+			 //selector = ConsistentHashSelector.newketamaSelector(invokerList, identityHashCode);
 
 			selectorCache.put(key, selector);
 			selector = (ConsistentHashSelector) selectorCache.get(key);

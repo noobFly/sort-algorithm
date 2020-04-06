@@ -14,11 +14,11 @@ import lombok.Data;
 
 /**
  * 
- * 轮询
+ * 轮询负载算法
  * <p>
  * 与RandomLoadBalance的核心处理逻辑是一样的
  * <p>
- * 只是轮询的基准数是访问次数累加AtomicInteger, 随机负载算法则是一个随机数字
+ * 不同的是： 轮询负载算法的基准数是访问次数累加AtomicInteger, 而随机负载算法则是一个随机数字
  * <p>
  * 需要注意权重表示范围的边界
  * 

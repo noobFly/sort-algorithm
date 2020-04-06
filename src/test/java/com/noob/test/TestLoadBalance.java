@@ -17,11 +17,11 @@ public class TestLoadBalance {
 
 	public static void main(String[] args) {
 		// testRandomLoadBalance();
-		// testConsistentHashLoadBalance();
+		 testConsistentHashLoadBalance();
 		//testRoundRobinLoadBalance();
 		// testTreeMap();
 		// testRandom();
-		 testSPI();
+		 // testSPI();
 	}
 
 	private static void testSPI() {
