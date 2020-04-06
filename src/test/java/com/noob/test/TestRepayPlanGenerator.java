@@ -20,14 +20,14 @@ public class TestRepayPlanGenerator {
 
 	public static void oneTimeRepaymentPlanGeneratorTest() throws ParseException {
 		LoanParam dto = buildParam();
-		dto.setAprBaseType(RateBaseTypeEnum.DAYLY_365.getType());
+		dto.setRateBaseType(RateBaseTypeEnum.DAYLY_365.getType());
 		print(new OneTimeRepayPlanGenerator().handle(dto));
 
 	}
 
 	public static void interestFirstRepaymentPlanGeneratorTest() throws ParseException {
 		LoanParam dto = buildParam();
-		dto.setAprBaseType(RateBaseTypeEnum.DAYLY_365.getType());
+		dto.setRateBaseType(RateBaseTypeEnum.DAYLY_365.getType());
 		print(new InterestFirstRepayPlanGenerator().handle(dto));
 
 	}
@@ -40,14 +40,14 @@ public class TestRepayPlanGenerator {
 
 	public static void averageCapitalAndInterestRepayPlanGeneratorTest() throws Exception {
 		LoanParam dto = buildParam();
-		dto.setAprBaseType(RateBaseTypeEnum.DAYLY_365.getType());
+		dto.setRateBaseType(RateBaseTypeEnum.DAYLY_365.getType());
 		print(new AverageCapitalAndInterestRepayPlanGenerator().handle(dto));
 
 	}
 
 	public static void averageCapitalRepayPlanGeneratorTest() throws Exception {
 		LoanParam dto = buildParam();
-		dto.setAprBaseType(RateBaseTypeEnum.DAYLY_365.getType());
+		dto.setRateBaseType(RateBaseTypeEnum.DAYLY_365.getType());
 		print(new AverageCapitalRepayPlanGenerator().handle(dto));
 
 	}
@@ -61,7 +61,7 @@ public class TestRepayPlanGenerator {
 		dto.setAmount(new BigDecimal("5000"));
 		// dto.setPeriodMinDay(25);
 		// dto.setRepaymentDay(20);
-		dto.setApr(new BigDecimal("36"));
+		dto.setYearRate(new BigDecimal("36"));
 		dto.setLoanNo("testLoan123456");
 		dto.setGraceDays(2);
 

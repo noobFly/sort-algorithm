@@ -27,7 +27,7 @@ public class LoanParam {
 	/**
 	 * 年化利率
 	 */
-	protected BigDecimal apr;
+	protected BigDecimal yearRate;
 	/** 宽限期天数 */
 	private Integer graceDays;
 	/**
@@ -63,7 +63,7 @@ public class LoanParam {
 	 * 
 	 * {@link RateBaseTypeEnum}
 	 */
-	protected int aprBaseType;
+	protected int RateBaseType;
 	/**
 	 * 等本等息 及 先息后本 是否需要在末期补利息差额
 	 * 
@@ -91,7 +91,7 @@ public class LoanParam {
 			throw new IllegalArgumentException("金额不能为空或小于0");
 		}
 
-		if (apr == null || apr.compareTo(BigDecimal.ZERO) <= 0) {
+		if (yearRate == null || yearRate.compareTo(BigDecimal.ZERO) <= 0) {
 			throw new IllegalArgumentException("利率不能为空或小于0");
 		}
 
@@ -103,7 +103,7 @@ public class LoanParam {
 			throw new IllegalArgumentException("截息日不能早于起息日");
 		}
 
-		if ((aprBaseType < RateBaseTypeEnum.MONTH.getType() || aprBaseType > RateBaseTypeEnum.DAYLY_365.getType())) {
+		if ((RateBaseType < RateBaseTypeEnum.MONTH.getType() || RateBaseType > RateBaseTypeEnum.DAYLY_365.getType())) {
 			throw new IllegalArgumentException("计息基数值不正确");
 		}
 		// 限制在28 是因为Calendar.set Calendar.DAY_OF_MONTH 时，若是一个超出当月天数的数值，将累加天数顺延至下月

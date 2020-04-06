@@ -15,7 +15,6 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 public class RepayPlan {
-	// columns START
 	/** 主键 */
 	private Long id;
 	/** 借据号 */

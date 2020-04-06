@@ -67,32 +67,42 @@ public abstract class AbstractRepayPlanGenerator implements RepayPlanGenerator {
 				throw new IllegalArgumentException("一次性还本付息截息日不能为空");
 			}
 		} else if (loanDto.getTotalPeriod() <= 0) {
-			throw new IllegalArgumentException("周期性还款方式总期数不能为空");
+			throw new IllegalArgumentException("总期数不能为空");
 		}
 	}
 
 	protected List<RepayPlan> calculate(LoanParam loanDto) {
 		Map<Date, Boolean> periodEndDateMap = periodEndDateMap(loanDto.getStartDate(), loanDto.getTotalPeriod(),
-				loanDto.getAprBaseType(), loanDto.getRepaymentDay(), loanDto.getPeriodMinDay()); // 各期还款截止时间
+				loanDto.getRateBaseType(), loanDto.getRepaymentDay(), loanDto.getPeriodMinDay()); // 各期还款截止时间
 		List<RepayPlan> list = calculate(loanDto, periodEndDateMap,
-				RateBaseTypeEnum.get(loanDto.getAprBaseType()).getBase());
+				RateBaseTypeEnum.get(loanDto.getRateBaseType()).getBase());
 
 		return list;
+	}
+
+	protected void validate(BigDecimal... amount) {
+		for (int i = 0; i < amount.length; i++) {
+			if (amount[i].compareTo(BigDecimal.ZERO) < 0) {
+				throw new IllegalArgumentException("还款计划生成异常");
+			}
+		}
+
 	}
 
 	/**
 	 * 计算利息
 	 * 
-	 * @param basePeriods          基准周期
+	 * @param basePeriods          计息总基准周期
 	 * @param amount               金额
 	 * @param rate                 利率
 	 * @param interestRoundingMode
-	 * @param periods              周期
+	 * @param realPeriods          计息实际周期
 	 * @return
 	 */
 	protected BigDecimal calculateInterest(BigDecimal basePeriods, BigDecimal amount, BigDecimal rate,
-			RoundingMode interestRoundingMode, int periods) {
-		return amount.multiply(rate).multiply(BigDecimal.valueOf(periods)).divide(basePeriods, 2, interestRoundingMode);
+			RoundingMode interestRoundingMode, int realPeriods) {
+		return amount.multiply(rate).multiply(BigDecimal.valueOf(realPeriods)).divide(basePeriods, 2,
+				interestRoundingMode);
 	}
 
 	protected Calendar dateToCalendar(Date date) {
@@ -102,28 +112,30 @@ public abstract class AbstractRepayPlanGenerator implements RepayPlanGenerator {
 	}
 
 	protected int calculateInterestDays(boolean isRaisingInterestFromN, Date beginDate, Date endDate) {
-		int baseCount;
-		baseCount = TimeUtil.getBetweenDays(endDate, beginDate); // 计息天数
+		int day;
+		day = TimeUtil.getBetweenDays(endDate, beginDate); // 计息天数
 		if (isRaisingInterestFromN) {
-			baseCount += 1;
+			day += 1;
 		}
-		return baseCount;
+		return day;
 	}
 
 	/**
 	 * 默认按月利率计息
+	 * <p>
+	 * 指定还款日时，首期优先判定是否大于单期最小天数，小于则地推至下月，无论是否指定，都采用按日利息计算。
 	 * 
 	 * @param startDate    开始时间
 	 * @param totalPeriod  总期数
 	 * @param repaymentDay 指定还款日
-	 * @param aprBaseType  计息基数
+	 * @param rateBaseType 计息基数类型
 	 * @param periodMinDay 周期最小天数 与指定还款日合用 针对第一期 范围在 [15, 25]
-	 * @return 各期及是否需要按日计息
+	 * @return 各期还款时间及是否需要按日计息
 	 */
-	protected Map<Date, Boolean> periodEndDateMap(Date startDate, int totalPeriod, int aprBaseType, int repaymentDay,
+	protected Map<Date, Boolean> periodEndDateMap(Date startDate, int totalPeriod, int rateBaseType, int repaymentDay,
 			int periodMinDay) {
 		Map<Date, Boolean> dateMap = new LinkedHashMap<Date, Boolean>();
-		boolean useDayRate = RateBaseTypeEnum.useDayRate(aprBaseType);
+		boolean useDayRate = RateBaseTypeEnum.useDayRate(rateBaseType);
 
 		Calendar periodCalendar = dateToCalendar(startDate);
 		int beginDay = periodCalendar.get(Calendar.DAY_OF_MONTH);
@@ -161,6 +173,6 @@ public abstract class AbstractRepayPlanGenerator implements RepayPlanGenerator {
 	}
 
 	public abstract List<RepayPlan> calculate(LoanParam loanDto, Map<Date, Boolean> periodEndDateMap,
-			BigDecimal defaultDivBase);
+			BigDecimal defaultBasePeriods);
 
 }

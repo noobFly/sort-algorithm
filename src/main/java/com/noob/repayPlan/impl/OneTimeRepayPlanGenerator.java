@@ -20,9 +20,9 @@ public class OneTimeRepayPlanGenerator extends AbstractRepayPlanGenerator {
 		Date endDate = loanDto.getEndDate();
 		Date startDate = loanDto.getStartDate();
 		int interestDays = calculateInterestDays(loanDto.isCalculateInterestFromNow(), startDate, endDate);
-		int yearDays = loanDto.getAprBaseType() == RateBaseTypeEnum.DAYLY_360.getType() ? 360 : 365;
+		int yearDays = loanDto.getRateBaseType() == RateBaseTypeEnum.DAYLY_360.getType() ? 360 : 365;
 		BigDecimal amount = loanDto.getAmount();
-		BigDecimal interest = calculateInterest(BigDecimal.valueOf(yearDays * 100), amount, loanDto.getApr(),
+		BigDecimal interest = calculateInterest(BigDecimal.valueOf(yearDays * 100), amount, loanDto.getYearRate(),
 				loanDto.getInterestRoundingMode(), interestDays);
 
 		return Arrays.asList(RepayPlan.init(loanDto.getLoanNo(), loanDto.getGraceDays(), 1, endDate, amount, interest,

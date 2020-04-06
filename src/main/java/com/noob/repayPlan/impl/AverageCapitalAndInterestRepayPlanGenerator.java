@@ -12,7 +12,6 @@ import com.noob.repayPlan.AbstractRepayPlanGenerator;
 import com.noob.repayPlan.LoanParam;
 import com.noob.repayPlan.RepayPlan;
 
-
 /**
  * 等本等息
  * <p>
@@ -29,17 +28,17 @@ public class AverageCapitalAndInterestRepayPlanGenerator extends AbstractRepayPl
 
 	@Override
 	public List<RepayPlan> calculate(LoanParam loanDto, Map<Date, Boolean> periodEndDateMap,
-			BigDecimal defaultDivBase) {
+			BigDecimal defaultBasePeriods) {
 		List<RepayPlan> planList = new ArrayList<>();
 		int periodCount = periodEndDateMap.size(); // 总期数
 		Date periodBeginDate = loanDto.getStartDate();
 		BigDecimal amount = loanDto.getAmount();
-		BigDecimal yearRate = loanDto.getApr();
+		BigDecimal yearRate = loanDto.getYearRate();
 		RoundingMode interestRoundingMode = loanDto.getInterestRoundingMode();
 
 		int curPeriod = 1;
-		BigDecimal distributedCapital = BigDecimal.ZERO;
-		BigDecimal distributedInterest = BigDecimal.ZERO;
+		BigDecimal distributedCapital = BigDecimal.ZERO; // 已计本金
+		BigDecimal distributedInterest = BigDecimal.ZERO; // 已计利息
 
 		BigDecimal periodCapital = amount.divide(BigDecimal.valueOf(periodCount), 2, loanDto.getCapitalRoundingMode()); // 每期应还本金
 
@@ -49,12 +48,12 @@ public class AverageCapitalAndInterestRepayPlanGenerator extends AbstractRepayPl
 
 			BigDecimal calculateAmount = amount.subtract(distributedCapital); // 计息本金
 
-			int baseCount = isDayRate
+			int realPeriods = isDayRate
 					? calculateInterestDays(loanDto.isCalculateInterestFromNow(), periodBeginDate, periodEndDate)
 					: 1;// 首期或指定 则用日利息计算。
-			BigDecimal divBase = isDayRate && !RateBaseTypeEnum.useDayRate(loanDto.getAprBaseType())
+			BigDecimal basePeriods = isDayRate && !RateBaseTypeEnum.useDayRate(loanDto.getRateBaseType())
 					? RateBaseTypeEnum.DAYLY_365.getBase()
-					: defaultDivBase; // 如果没指定按日计息则默认365
+					: defaultBasePeriods; // 主要是应对首个还款周期超出1个月(期)的情况下按日计息，如果没有指定计息基数具体日则默认365
 
 			BigDecimal capital = BigDecimal.ZERO;
 			BigDecimal interest = BigDecimal.ZERO;
@@ -64,7 +63,7 @@ public class AverageCapitalAndInterestRepayPlanGenerator extends AbstractRepayPl
 					int totalBaseCount = calculateInterestDays(loanDto.isCalculateInterestFromNow(),
 							loanDto.getStartDate(), loanDto.getEndDate());
 					BigDecimal totalInterest = calculateInterest(
-							RateBaseTypeEnum.useDayRate(loanDto.getAprBaseType()) ? defaultDivBase
+							RateBaseTypeEnum.useDayRate(loanDto.getRateBaseType()) ? defaultBasePeriods
 									: RateBaseTypeEnum.DAYLY_365.getBase(),
 							amount, yearRate, interestRoundingMode, totalBaseCount); // 按日利息计算实际总利息
 					interest = totalInterest.subtract(distributedInterest);
@@ -73,18 +72,15 @@ public class AverageCapitalAndInterestRepayPlanGenerator extends AbstractRepayPl
 				capital = periodCapital;
 			}
 			if (BigDecimal.ZERO.equals(interest)) {
-				interest = calculateInterest(divBase, amount, yearRate, interestRoundingMode, baseCount);// 等额本金这的金额基数是剩余未还本金
+				interest = calculateInterest(basePeriods, amount, yearRate, interestRoundingMode, realPeriods);// 等额本金的金额基数是剩余未还本金
 			}
 
 			BigDecimal remainingPrincipal = calculateAmount.subtract(capital);
 
-			if (interest.compareTo(BigDecimal.ZERO) < 0 || capital.compareTo(BigDecimal.ZERO) < 0
-					|| remainingPrincipal.compareTo(BigDecimal.ZERO) < 0) {
-				throw new IllegalArgumentException("还款计划生成异常");
-			}
+			validate(interest, capital, remainingPrincipal);
 
-			planList.add(RepayPlan.init(loanDto.getLoanNo(), loanDto.getGraceDays(), curPeriod,
-					periodEndDate, capital, interest, remainingPrincipal));
+			planList.add(RepayPlan.init(loanDto.getLoanNo(), loanDto.getGraceDays(), curPeriod, periodEndDate, capital,
+					interest, remainingPrincipal));
 
 			periodBeginDate = periodEndDate; // 下一期的起息日
 			curPeriod++;
