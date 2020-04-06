@@ -12,9 +12,9 @@ import com.google.common.base.Joiner;
 /**
  * 参考 https://blog.csdn.net/elricboa/article/details/78847305
  * <p>
- * Least recently used，最近最少使用算法
+ * Least recently used，最近最长时间未被使用算法
  * <p>
- * 根据数据的历史访问记录来进行淘汰数据，其核心思想是“如果数据最近被访问过，那么将来被访问的几率也更高”。
+ * 淘汰最长时间未被使用的数据，其核心思想是“如果数据最近被访问过，那么将来被访问的几率也更高”。
  * <p>
  * 较优的实现方式：
  * <p>
@@ -36,7 +36,7 @@ public class LRUCache<K, V> extends LinkedHashMap<K, V> {
 		 * <p>
 		 * accessOrder为true时, 在get操作 -> getNode方法执行完后: 再执行afterNodeAccess将获取到的Node移动到末尾
 		 */
-		super(maxCapacity, 0.75f, true);
+		super(maxCapacity, 0.75f, true); // 按访问排序
 		this.maxCapacity = maxCapacity;
 
 	}
