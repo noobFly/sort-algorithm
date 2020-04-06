@@ -37,7 +37,7 @@ public class AverageCapitalAndInterestRepayPlanGenerator extends AbstractRepayPl
 		RoundingMode interestRoundingMode = loanDto.getInterestRoundingMode();
 
 		int curPeriod = 1;
-		BigDecimal distributedCapital = BigDecimal.ZERO; // 已计本金
+		BigDecimal calculateAmount = amount; // 剩余计息本金
 		BigDecimal distributedInterest = BigDecimal.ZERO; // 已计利息
 
 		BigDecimal periodCapital = amount.divide(BigDecimal.valueOf(periodCount), 2, loanDto.getCapitalRoundingMode()); // 每期应还本金
@@ -45,8 +45,6 @@ public class AverageCapitalAndInterestRepayPlanGenerator extends AbstractRepayPl
 		for (Entry<Date, Boolean> dateEntry : periodEndDateMap.entrySet()) {
 			Date periodEndDate = dateEntry.getKey();
 			Boolean isDayRate = dateEntry.getValue();
-
-			BigDecimal calculateAmount = amount.subtract(distributedCapital); // 计息本金
 
 			int realPeriods = isDayRate
 					? calculateInterestDays(loanDto.isCalculateInterestFromNow(), periodBeginDate, periodEndDate)
@@ -75,16 +73,15 @@ public class AverageCapitalAndInterestRepayPlanGenerator extends AbstractRepayPl
 				interest = calculateInterest(basePeriods, amount, yearRate, interestRoundingMode, realPeriods);// 等额本金的金额基数是剩余未还本金
 			}
 
-			BigDecimal remainingPrincipal = calculateAmount.subtract(capital);
+			calculateAmount = calculateAmount.subtract(capital);
 
-			validate(interest, capital, remainingPrincipal);
+			validate(interest, capital, calculateAmount);
 
 			planList.add(RepayPlan.init(loanDto.getLoanNo(), loanDto.getGraceDays(), curPeriod, periodEndDate, capital,
-					interest, remainingPrincipal));
+					interest, calculateAmount));
 
 			periodBeginDate = periodEndDate; // 下一期的起息日
 			curPeriod++;
-			distributedCapital = distributedCapital.add(capital);
 			distributedInterest = distributedInterest.add(interest);
 
 		}
