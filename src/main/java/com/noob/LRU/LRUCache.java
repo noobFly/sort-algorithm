@@ -48,13 +48,14 @@ public class LRUCache<K, V> extends LinkedHashMap<K, V> {
 	 * 首先：
 	 * <p>
 	 * 不存在指定KEY则创建新的节点。 LinkedHashMap重写了newNode方法, 会执行linkNodeLast方法将节点放到末尾
+	 * <p>
 	 * 存在指定KEY，则在获取Entry更新VALUE值后， 调用 afterNodeAccess 将获取到的Node移动到末尾；
 	 * <p>
 	 * 在最后执行afterNodeInsertion: 会执行removeEldestEntry方法判定是否需要删除最前面（最近最少访问的）节点
 	 */
 	@Override
 	protected boolean removeEldestEntry(java.util.Map.Entry<K, V> eldest) {
-		return size() > maxCapacity;
+		return size() > maxCapacity ; //因为是先put成功再判定是否需要删除，为避免超出容量则需设置为 size() >=  maxCapacity , 但又无形中导致部分状态下达不到maxCapacity （具体情况具体分析）
 	}
 
 	private <T> T lock(Supplier<T> op) {
