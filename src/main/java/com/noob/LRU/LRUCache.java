@@ -34,9 +34,9 @@ public class LRUCache<K, V> extends LinkedHashMap<K, V> {
 		/**
 		 * LinkedHashMap重写了hashMap的get操作：
 		 * <p>
-		 * accessOrder为true时, 在get操作 -> getNode方法执行完后: 再执行afterNodeAccess将获取到的Node移动到末尾
+		 * accessOrder为true时(按访问排序), 在get操作 -> getNode方法执行完后 再执行afterNodeAccess将获取到的Node移动到末尾
 		 */
-		super(maxCapacity, 0.75f, true); // 按访问排序
+		super(maxCapacity, 0.75f, true);
 		this.maxCapacity = maxCapacity;
 
 	}
