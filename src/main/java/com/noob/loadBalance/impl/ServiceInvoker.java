@@ -14,7 +14,6 @@ import lombok.Data;
 @Builder(toBuilder = true)
 @Data
 public class ServiceInvoker {
-	public static int DEFAULT_NODE = 160;
 	public static String[] DEFAULT_INDEX = new String[] { "0" };
 
 	private String applicationName; // 服务名
@@ -25,7 +24,7 @@ public class ServiceInvoker {
 	 * 一致性hash算法内使用
 	 */
 	private String hashArguments; // 指定索引位置的参数参与计算hash
-	private final int nodes = DEFAULT_NODE; // 节点个数 <越大越平衡、越均匀>
+	private final int nodes; // 指定hash环节点个数 <越大越平衡、越均匀>
 
 	/**
 	 * 

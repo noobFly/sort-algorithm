@@ -22,7 +22,7 @@ public abstract class ConsistentHashSelector {
 	public ConsistentHashSelector(List<ServiceInvoker> invokerList, int identityHashCode) {
 		this.identityHashCode = identityHashCode;
 		ServiceInvoker firstInvoker = invokerList.get(0);
-		this.replicaNumber = firstInvoker.getNodes() < 1 ? ServiceInvoker.DEFAULT_NODE : firstInvoker.getNodes(); // 默认160虚拟Node
+		this.replicaNumber = firstInvoker.getNodes() < 1 ? 160 : firstInvoker.getNodes(); // 默认160虚拟Node
 		String[] index = Strings.isNullOrEmpty(firstInvoker.getHashArguments()) ? ServiceInvoker.DEFAULT_INDEX
 				: firstInvoker.getHashArguments().split(",");
 		argumentIndex = new int[index.length];
