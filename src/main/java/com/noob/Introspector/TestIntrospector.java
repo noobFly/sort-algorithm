@@ -4,7 +4,10 @@ import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+import java.lang.reflect.Method;
 import java.util.function.Supplier;
+
+import com.alibaba.fastjson.JSON;
 
 /**
  * 内省
@@ -30,6 +33,7 @@ public class TestIntrospector {
 	}
 
 	public static void main(String[] args) {
+		University university = new University();
 		BeanInfo beanInfo = null;
 		try {
 			beanInfo = Introspector.getBeanInfo(University.class);
@@ -37,17 +41,28 @@ public class TestIntrospector {
 			for (PropertyDescriptor propertyDescriptor : propertyDescriptors) {
 				String name = propertyDescriptor.getName();
 				System.out.println("Name:   " + name);
-				System.out.println(
-						"WriteMethod:   " + ignoreException(() -> propertyDescriptor.getWriteMethod().getName()));
-				System.out.println(
-						"ReadMethod:   " + ignoreException(() -> propertyDescriptor.getReadMethod().getName()));
+				System.out.println("WriteMethod:   " + ignoreException(() -> {
+					Method writeMethod = propertyDescriptor.getWriteMethod();
+					writeMethod.setAccessible(true);
+					try {
+						writeMethod.invoke(university, 11);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					return writeMethod.getName();
+				}));
+				System.out.println("ReadMethod:   " + ignoreException(() -> {
+					Method readMethod = propertyDescriptor.getReadMethod();
+					return readMethod.getName();
+				}));
 				System.out.println("=======================");
 			}
 		} catch (IntrospectionException e) {
 			e.printStackTrace();
 		}
-
+		System.out.println(JSON.toJSONString(university));
 	}
+
 
 	/**
 		Name:   age
