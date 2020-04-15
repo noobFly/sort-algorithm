@@ -58,9 +58,9 @@ public class RandomLoadBalance {
 				choose3++;
 			}
 			--loop;
+			System.out.println(String.format("index1-%s index2-%s index3-%s", choose1, choose2, choose3));
 		}
 
-		System.out.println(String.format("index1-%s index2-%s index3-%s", choose1, choose2, choose3));
 
 	}
 

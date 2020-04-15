@@ -53,9 +53,9 @@ public class SqlBuilder {
 		try {
 
 			File file = new File(filePath);
-			if (!file.exists()) {
-				file.createNewFile();
-			}
+			/* 不要这个判定也可以在write阶段生成新文件
+			 * if (!file.exists()) { file.createNewFile(); }
+			 */
 			outFile = new FileOutputStream(file);
 			outFile.write(sql.getBytes("UTF-8"));
 		} catch (Exception e) {

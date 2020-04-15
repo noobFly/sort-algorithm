@@ -16,8 +16,8 @@ public class TestLoadBalance {
 	static String[] ServiceIps = new String[] { "127.0.0.1:8080", "189.84.255.216:8080", "172.164.11.144:8080" };
 
 	public static void main(String[] args) {
-		// testRandomLoadBalance();
-		 testConsistentHashLoadBalance();
+		 testRandomLoadBalance();
+		 //testConsistentHashLoadBalance();
 		//testRoundRobinLoadBalance();
 		// testTreeMap();
 		// testRandom();
