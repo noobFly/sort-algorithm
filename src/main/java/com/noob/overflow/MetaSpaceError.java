@@ -61,15 +61,18 @@ public class MetaSpaceError extends ClassLoader {
 		return classes;
 	}
 	
-	/**
-	 * Exception in thread "main" java.lang.OutOfMemoryError: Metaspace
-	at net.sf.cglib.core.AbstractClassGenerator.create(AbstractClassGenerator.java:237)
+/**
+ * Exception in thread "main" java.lang.OutOfMemoryError: Metaspace
+	at java.lang.Class.forName0(Native Method)
+	at java.lang.Class.forName(Unknown Source)
+	at net.sf.cglib.core.ReflectUtils.defineClass(ReflectUtils.java:386)
+	at net.sf.cglib.core.AbstractClassGenerator.create(AbstractClassGenerator.java:219)
 	at net.sf.cglib.proxy.Enhancer.createHelper(Enhancer.java:377)
 	at net.sf.cglib.proxy.Enhancer.create(Enhancer.java:285)
-	at com.noob.overflow.MetaSpaceError.test(MetaSpaceError.java:79)
-	at com.noob.overflow.MetaSpaceError.main(MetaSpaceError.java:84)
-	 */
-	public static void test() {
+	at com.noob.overflow.MetaSpaceError.metaspaceError(MetaSpaceError.java:87)
+	at com.noob.overflow.MetaSpaceError.main(MetaSpaceError.java:92)
+ */
+	public static void metaspaceError() {
 		  int i = 0;
 	        while (true) {
 	            System.out.println(i++);
@@ -89,7 +92,9 @@ public class MetaSpaceError extends ClassLoader {
 	}
 	
 	public static void main(String[] args) throws InterruptedException {
-		test();
+		// metaspaceError();
+		
+		compressedClassSpaceError();
 	}
 
 }
