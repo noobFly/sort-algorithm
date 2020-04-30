@@ -7,13 +7,11 @@ import com.noob.sign.domain.Customer;
 import com.noob.sign.domain.TemplateInput;
 
 /**
- * 子类如果有构造函数，需要调super();
- * <p>
  * eg. customer.customerName，对应pdf模板中的${customer.customerName}
  * <p>
  * 默认域对象下的属性可以不指定域，eg.applyLimit.channel跟channel(默认域为applyLimit)意义是一样的
  * <p>
- * 添加其它域参数(见 TemplateDomain)添加一个get{Domain}的方法即可
+ * 添加其它域参数({@link TemplateDomain} )添加一个get{Domain}的方法即可
  * <p>
  * 
  *

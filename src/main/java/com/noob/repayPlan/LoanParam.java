@@ -111,8 +111,8 @@ public class LoanParam {
 			throw new IllegalArgumentException("还款日不正确，应为0-28");
 		}
 
-		if (periodMinDay < 0 || periodMinDay > 25 || (periodMinDay > 0 && periodMinDay < 15)) {
-			throw new IllegalArgumentException("periodMinDay不正确，应为15-25");
+		if (periodMinDay < 0 || periodMinDay > 25 || (periodMinDay > 0 && periodMinDay < 10)) {
+			throw new IllegalArgumentException("periodMinDay不正确，应为10-25");
 		}
 	}
 

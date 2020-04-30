@@ -35,7 +35,17 @@ import com.noob.repayPlan.RepayPlan;
  * 
  */
 public class AverageCapitalPlusInterestRepayPlanGenerator extends AbstractRepayPlanGenerator {
-
+	/**
+	 * 按日计息
+	 * <p>
+	 * 最后一期仍然用每期应还总额-剩余本金 = 利息 的方式得出的利息可能为负数。
+	 * <p>
+	 * 因为每期应还总额是按月利率算出的值，每期还的总额固定。 按日计息则可能当前期利息收的会多，本金收的少。那下一期剩余本金就多，利息也多，剩余本金还是得少。
+	 * <p>
+	 * 最终最后一剩余本金可能会超出每期应还总额的值
+	 * <p>
+	 * 这种情况最后一期利息就按日计算
+	 */
 	@Override
 	public List<RepayPlan> calculate(LoanParam loanDto, Map<Date, Boolean> periodEndDateMap,
 			BigDecimal defaultBasePeriods) {
@@ -56,18 +66,22 @@ public class AverageCapitalPlusInterestRepayPlanGenerator extends AbstractRepayP
 
 			BigDecimal interest = BigDecimal.ZERO;
 			BigDecimal capital = BigDecimal.ZERO;
+			int realPeriods = isDayRate
+					? calculateInterestDays(loanDto.isCalculateInterestFromNow(), periodBeginDate, periodEndDate)
+					: 1;// 首期或指定 则用日利息计算。
 
+			BigDecimal basePeriods = isDayRate && !RateBaseTypeEnum.useDayRate(loanDto.getRateBaseType())
+					? RateBaseTypeEnum.DAYLY_365.getBase()
+					: defaultBasePeriods;
 			if (curPeriod == periodCount) {
 				capital = calculateAmount;
-				interest = periodRepayAmount.subtract(capital);
+				if (isDayRate) {
+					interest = calculateInterest(basePeriods, calculateAmount, yearRate,
+							loanDto.getInterestRoundingMode(), realPeriods);
+				} else {
+					interest = periodRepayAmount.subtract(capital);
+				}
 			} else {
-				int realPeriods = isDayRate
-						? calculateInterestDays(loanDto.isCalculateInterestFromNow(), periodBeginDate, periodEndDate)
-						: 1;// 首期或指定 则用日利息计算。
-
-				BigDecimal basePeriods = isDayRate && !RateBaseTypeEnum.useDayRate(loanDto.getRateBaseType())
-						? RateBaseTypeEnum.DAYLY_365.getBase()
-						: defaultBasePeriods;
 
 				interest = calculateInterest(basePeriods, calculateAmount, yearRate, loanDto.getInterestRoundingMode(),
 						realPeriods);

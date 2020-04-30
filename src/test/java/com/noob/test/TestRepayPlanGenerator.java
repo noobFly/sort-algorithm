@@ -34,6 +34,7 @@ public class TestRepayPlanGenerator {
 
 	public static void averageCapitalPlusInterestRepayPlanGeneratorTest() throws ParseException {
 		LoanParam dto = buildParam();
+		dto.setRateBaseType(RateBaseTypeEnum.DAYLY_360.getType());
 		print(new AverageCapitalPlusInterestRepayPlanGenerator().handle(dto));
 
 	}
@@ -55,13 +56,13 @@ public class TestRepayPlanGenerator {
 	private static LoanParam buildParam() throws ParseException {
 		LoanParam dto = new LoanParam();
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-		dto.setStartDate(df.parse("2020-02-21"));
+		dto.setStartDate(df.parse("2019-12-17"));
 		dto.setEndDate(df.parse("2020-08-21"));
-		dto.setTotalPeriod(6);
-		dto.setAmount(new BigDecimal("5000"));
-		// dto.setPeriodMinDay(25);
-		// dto.setRepaymentDay(20);
-		dto.setYearRate(new BigDecimal("36"));
+		dto.setTotalPeriod(12);
+		dto.setAmount(new BigDecimal("1000"));
+		dto.setPeriodMinDay(10);
+		dto.setRepaymentDay(17);
+		dto.setYearRate(new BigDecimal("24"));
 		dto.setLoanNo("testLoan123456");
 		dto.setGraceDays(2);
 

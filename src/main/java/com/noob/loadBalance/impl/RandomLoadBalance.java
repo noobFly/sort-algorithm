@@ -22,7 +22,7 @@ import java.util.TreeMap;
  * <p>
  * 则分别对应的 {0,1,2}, {3,4,5,6,7},{8,9} 权重范围是 [0, 3) , [3,8), [8,10) 左闭右开
  * <p>
- * TreeMap的KEY需要实现{@link Comparable}接口
+ * TreeMap通过KEY进行排序, KEY需要实现{@link Comparable}接口。所以不能为空
  *
  */
 public class RandomLoadBalance {

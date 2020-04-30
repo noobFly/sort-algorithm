@@ -129,7 +129,7 @@ public abstract class AbstractRepayPlanGenerator implements RepayPlanGenerator {
 	 * @param totalPeriod  总期数
 	 * @param repaymentDay 指定还款日
 	 * @param rateBaseType 计息基数类型
-	 * @param periodMinDay 周期最小天数 与指定还款日合用 针对第一期 范围在 [15, 25]
+	 * @param periodMinDay 与指定还款日合用 针对第一期的最小天数范围在 [10, 25] 可在 LoanParam.checkParams()里调整
 	 * @return 各期还款时间及是否需要按日计息
 	 */
 	protected Map<Date, Boolean> periodEndDateMap(Date startDate, int totalPeriod, int rateBaseType, int repaymentDay,
