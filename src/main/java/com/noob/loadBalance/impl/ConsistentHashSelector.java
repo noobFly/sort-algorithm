@@ -1,16 +1,15 @@
 package com.noob.loadBalance.impl;
 
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
 import com.google.common.base.Strings;
 import com.google.common.hash.Hashing;
+import com.noob.util.MD5;
 
 import lombok.Getter;
+
 /**
  * Hash算法不仅要快且要变化足够激烈, 相似的字符串如“abc”和“abd”能够均匀散落在哈希环上
  *
@@ -49,7 +48,7 @@ public abstract class ConsistentHashSelector {
 
 	public ServiceInvoker select(Object... params) {
 		String key = toKey(params);
-		byte[] digest = md5(key);
+		byte[] digest = MD5.md5_16(key);
 		return selectForKey(hash(digest, 0));
 	}
 
@@ -69,25 +68,6 @@ public abstract class ConsistentHashSelector {
 			entry = virtualServices.firstEntry(); // 超出范围为null则默认取第一个
 		}
 		return entry.getValue();
-	}
-
-	 //MD5 加密后的位数一般为两种，16 位与 32 位。16 位实际上是从 32 位字符串中，取中间的第 9 位到第 24 位的部分
-	public static byte[] md5(String key) {
-		MessageDigest md5;
-		try {
-			md5 = MessageDigest.getInstance("MD5");// 16位
-		} catch (NoSuchAlgorithmException e) {
-			throw new IllegalStateException(e.getMessage(), e);
-		}
-		md5.reset();
-		byte[] bytes;
-		try {
-			bytes = key.getBytes("UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			throw new IllegalStateException(e.getMessage(), e);
-		}
-		md5.update(bytes);
-		return md5.digest();
 	}
 
 	/**
@@ -126,10 +106,10 @@ public abstract class ConsistentHashSelector {
 		public TreeMap<Long, ServiceInvoker> buildConsistentHashRing(List<ServiceInvoker> invokerList,
 				int replicaNumber) {
 			TreeMap<Long, ServiceInvoker> virtualServices = new TreeMap<Long, ServiceInvoker>();
-			// 按每组4个来构建虚拟服务Node. 因为 Md5是一个16字节长度的数组，将16字节的数组每四个字节一组，分别对应一个虚拟节点
+			// 按每组4个来构建虚拟服务Node. 因为 Md5后的hash值是一个16字节长度的数组，将16字节的数组每四个字节一组，分别对应一个虚拟节点
 			for (ServiceInvoker invoker : invokerList) {
 				for (int i = 0; i < replicaNumber / 4; i++) {
-					byte[] digest = md5(invoker.getServiceIp() + i); // 增加编号来作标识Node
+					byte[] digest = MD5.md5_16(invoker.getServiceIp() + i); // 增加编号来作标识Node
 					for (int offset = 0; offset < 4; offset++) {
 						virtualServices.put(hash(digest, offset), invoker);
 					}
@@ -152,7 +132,7 @@ public abstract class ConsistentHashSelector {
 			TreeMap<Long, ServiceInvoker> virtualServices = new TreeMap<Long, ServiceInvoker>();
 			for (ServiceInvoker invoker : invokerList) {
 				for (int i = 0; i < replicaNumber; i++) {
-					byte[] digest = md5(invoker.getServiceIp() + i); // 增加编号来作标识Node
+					byte[] digest = MD5.md5_16(invoker.getServiceIp() + i); // 增加编号来作标识Node
 					virtualServices.put(hash(digest, 0), invoker);
 				}
 			}
