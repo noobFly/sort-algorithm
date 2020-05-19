@@ -27,7 +27,8 @@ import com.noob.repayPlan.RepayPlan;
  * <p>
  * …
  * <p>
- * 由此可得第k个月后所欠银行贷款为 A(1+β)^k –X[1+(1+β)+(1+β)^2+…+(1+β)^(k-1)]= A(1+β)^k –X[(1+β)^k - 1]/β = 0
+ * 由此可得第k个月后所欠银行贷款为 A(1+β)^k –X[1+(1+β)+(1+β)^2+…+(1+β)^(k-1)]= A(1+β)^k
+ * –X[(1+β)^k - 1]/β = 0
  * <p>
  * 推得： 每期还款本息总额 x = A * β * (1 + β) ^ k / [(1 + β) ^ k - 1]
  * <p>
@@ -101,9 +102,9 @@ public class AverageCapitalPlusInterestRepayPlanGenerator extends AbstractRepayP
 		return planList;
 	}
 
-	private static BigDecimal getPeriodRepayAmount(BigDecimal amount, BigDecimal monthRate, int periods,
+	private static BigDecimal getPeriodRepayAmount(BigDecimal amount, BigDecimal monthRate, int totalPeriods,
 			RoundingMode roundingMode) {
-		double aprPow = Math.pow(1 + monthRate.doubleValue(), periods);
+		double aprPow = Math.pow(1 + monthRate.doubleValue(), totalPeriods);
 		double denominator = 1;
 		if (aprPow > 1) {
 			denominator = aprPow - 1;
@@ -112,12 +113,32 @@ public class AverageCapitalPlusInterestRepayPlanGenerator extends AbstractRepayP
 				2, roundingMode);
 	}
 
+	/**
+	 * 标准利息 A * β * ( (1+β)^K - (1+β)^(t-1) ) / ( (1+β)^K - 1)
+	 * <p>
+	 * 首月利息 = A * β * ( (1+β)^K - (1+β)^(1-1) ) / ( (1+β)^K - 1) = A * β * ( (1+β)^K - 1) / ( (1+β)^K - 1) = A * β
+	 * <p>
+	 * t-还款月序号
+	 * @return
+	 */
+	private static BigDecimal standardInterest(int curPeriod, BigDecimal amount, BigDecimal monthRateRate,
+			int totalPeriods, RoundingMode roundingMode) {
+		BigDecimal base = monthRateRate.add(BigDecimal.ONE);
+		BigDecimal total = new BigDecimal(Math.pow(base.doubleValue(), totalPeriods));
+		return amount.multiply(monthRateRate)
+				.multiply(total.subtract(new BigDecimal(Math.pow(base.doubleValue(), curPeriod - 1))))
+				.divide(total.subtract(BigDecimal.ONE), 2, roundingMode);
+	}
+
 	@Override
 	public String getRepayMode() {
 		return RepayMode.SYS002;
 	}
 
 	public static void main(String[] args) {
+		System.out.println(standardInterest(1, new BigDecimal("5000"),
+				new BigDecimal("36").divide(BigDecimal.valueOf(12 * 100), 48, RoundingMode.DOWN), 6,
+				RoundingMode.HALF_UP));
 		System.out.println(getPeriodRepayAmount(new BigDecimal("5000"),
 				new BigDecimal("36").divide(BigDecimal.valueOf(12 * 100), 48, RoundingMode.DOWN), 6,
 				RoundingMode.HALF_UP));
