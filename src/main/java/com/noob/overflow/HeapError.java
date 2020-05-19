@@ -19,7 +19,7 @@ import com.google.common.collect.Lists;
  * <p>
  * UseGCOverheadLimit: 通过统计GC时间来预测是否要OOM了，提前抛出异常，防止OOM发生。
  * <p>
- * 并行/并发回收器在GC回收时间过长时会抛出OutOfMemroyError。过长的定义是，超过98%的时间（-XX:GCTimeLimit指定GC时间所占总时间的百分比）用来做GC并且回收了不到2%的堆内存（GCHeapFreeLimit设置了一个下限，它指定了垃圾收集后应该有多大的空闲区域，这是一个相对于堆的总小大的百分比）。）。
+ * 并行/并发回收器在GC回收时间过长时会抛出OutOfMemroyError。过长的定义是，超过98%的时间（-XX:GCTimeLimit指定GC时间所占总时间的百分比）用来做GC并且回收了不到2%的堆内存（GCHeapFreeLimit设置了一个下限，它指定了垃圾收集后应该有多大的空闲区域，这是一个相对于堆的总小大的百分比）。
  * <p>
  * https://www.iteye.com/blog/simon-fish-1631791
  */
@@ -28,7 +28,7 @@ public class HeapError {
 	
 	
 	public static void main(String[] args) {
-		//error1();
+		error1();
 		error2();
 	}
 
