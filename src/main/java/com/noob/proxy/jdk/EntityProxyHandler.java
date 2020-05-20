@@ -2,6 +2,7 @@ package com.noob.proxy.jdk;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 
 import lombok.AllArgsConstructor;
 
@@ -11,7 +12,8 @@ public class EntityProxyHandler implements InvocationHandler {
 
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-		System.out.println("proxy invoke. method:" + method.getName());
+		System.out.println(String.format("proxy invoke. method: %s, isProxy: %s", method.getName(),
+				Proxy.isProxyClass(proxy.getClass())));
 		return method.invoke(entity, args);
 	}
 }

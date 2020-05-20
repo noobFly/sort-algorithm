@@ -34,7 +34,12 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class SpringAopProxy {
-
+	/**
+	 * 
+	 * @param bean       真实target对象。
+	 * @param cglibProxy 是否开启cglib代理。但真正是否使用需要后续判定
+	 * @return
+	 */
 	public static ProxyFactoryBean proxyFactoryBean(Object bean, boolean cglibProxy) {
 		ProxyFactoryBean factory = new ProxyFactoryBean();
 		factory.setProxyTargetClass(cglibProxy);
