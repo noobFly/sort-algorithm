@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import lombok.extern.slf4j.Slf4j;
 
+@WebServlet(urlPatterns = "/async", asyncSupported = true)
+@Slf4j
 public class AsyncServlet extends HttpServlet {
 
 	ExecutorService executorService = Executors.newSingleThreadExecutor();
@@ -23,20 +25,24 @@ public class AsyncServlet extends HttpServlet {
 		// step1: 开启异步上下文
 		final AsyncContext ctx = req.startAsync();
 		ctx.getResponse().getWriter().print("async servlet1");
-		ctx.getResponse().getWriter().flush();  // 并不会立即输出。也是等到ctx.complete() 一并输出
+		ctx.getResponse().getWriter().flush(); 
+		resp.getWriter().print("async servlet2");
+		resp.getWriter().flush();
+		// 并不会立即输出。也是等到ctx.complete()完成 一并输出
 		// step2: 提交线程池异步执行
 		executorService.execute(() -> {
 			try {
 				log.info("async SocketEvent.OPEN_READ 准备执行了");
 				// 模拟耗时
 				Thread.sleep(1000L);
-				ctx.getResponse().getWriter().print("async servlet2");
+				ctx.getResponse().getWriter().print("async servlet3");
 				log.info("async SocketEvent.OPEN_READ 执行了");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			//step3: 最后执行完成后完成回调。
+			// step3: 完成回调输出。
 			ctx.complete();
 		});
 	}
+
 }
