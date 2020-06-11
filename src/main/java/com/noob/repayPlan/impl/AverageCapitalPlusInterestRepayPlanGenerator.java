@@ -37,11 +37,11 @@ import com.noob.repayPlan.RepayPlan;
  */
 public class AverageCapitalPlusInterestRepayPlanGenerator extends AbstractRepayPlanGenerator {
 	/**
-	 * 按日计息
+	 * 按日计息时：
 	 * <p>
 	 * 最后一期仍然用每期应还总额-剩余本金 = 利息 的方式得出的利息可能为负数。
 	 * <p>
-	 * 因为每期应还总额是按月利率算出的值，每期还的总额固定。 按日计息则可能当前期利息收的会多，本金收的少。那下一期剩余本金就多，利息也多，剩余本金还是得少。
+	 * 因为每期应还总额是按月利率算出的值，每期还的总额固定。 按日计息则可能当前期利息收的会多，本金收的少。那下一期剩余本金就多，利息也多，剩余本金更加多。
 	 * <p>
 	 * 最终最后一剩余本金可能会超出每期应还总额的值
 	 * <p>
@@ -76,17 +76,17 @@ public class AverageCapitalPlusInterestRepayPlanGenerator extends AbstractRepayP
 					: defaultBasePeriods;
 			if (curPeriod == periodCount) {
 				capital = calculateAmount;
-				if (isDayRate) {
+				if (isDayRate) { // 末期 & 按日计息 （按周期计息只有第一期可能是会换成按日计息）
 					interest = calculateInterest(basePeriods, calculateAmount, yearRate,
 							loanDto.getInterestRoundingMode(), realPeriods);
 				} else {
-					interest = periodRepayAmount.subtract(capital);
+					interest = periodRepayAmount.subtract(capital); // 末期正常情况： 利息 = 应还总金额 - 本金
 				}
 			} else {
 
 				interest = calculateInterest(basePeriods, calculateAmount, yearRate, loanDto.getInterestRoundingMode(),
 						realPeriods);
-				capital = periodRepayAmount.subtract(interest); // 先计算剩余未还金额的利息，剩下的就是当期应还本金
+				capital = periodRepayAmount.subtract(interest); // 非末期： 先计算剩余未还金额的利息，剩下的就是当期应还本金
 			}
 
 			calculateAmount = calculateAmount.subtract(capital); // 剩余未还本金
@@ -114,11 +114,14 @@ public class AverageCapitalPlusInterestRepayPlanGenerator extends AbstractRepayP
 	}
 
 	/**
-	 * 标准利息 A * β * ( (1+β)^K - (1+β)^(t-1) ) / ( (1+β)^K - 1)
-	 * <p>
-	 * 首月利息 = A * β * ( (1+β)^K - (1+β)^(1-1) ) / ( (1+β)^K - 1) = A * β * ( (1+β)^K - 1) / ( (1+β)^K - 1) = A * β
+	 * 标准利息 *
 	 * <p>
 	 * t-还款月序号
+	 * <p>
+	 * A * β * ( (1+β)^K - (1+β)^(t-1) ) / ( (1+β)^K - 1)
+	 * <p>
+	 * 首月利息 = A * β * ( (1+β)^K - (1+β)^(1-1) ) / ( (1+β)^K - 1) = A * β * ( (1+β)^K - 1) / ( (1+β)^K - 1) = A * β
+	 * 
 	 * @return
 	 */
 	private static BigDecimal standardInterest(int curPeriod, BigDecimal amount, BigDecimal monthRateRate,

@@ -29,7 +29,7 @@ import lombok.extern.slf4j.Slf4j;
  * <p>
  * 所以 A方法内部执行B方法时 不再触发拦截器
  * 
- * @author admin
+ * @author admin  {@link org.springframework.context.annotation.SpringCglibProxy}
  *
  */
 @Slf4j
