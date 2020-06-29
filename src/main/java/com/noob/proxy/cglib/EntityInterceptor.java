@@ -34,8 +34,8 @@ public class EntityInterceptor implements MethodInterceptor {
 	public Object intercept(Object object, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
 		System.out.println(String.format("cglib intercept. methodName: %s, isProxy: %s", method.getName(),
 				Enhancer.isEnhanced(object.getClass())));
-		//  return methodProxy.invokeSuper(object, args); // object传入的是代理对象。 方法A内部执行到B 可触发拦截器
-			 return methodProxy.invoke(target, args); // 原始target对象。 方法 A内部执行到B 不再触发
+		//  return methodProxy.invokeSuper(object, args); // object必须传入的是代理对象。 方法A内部执行到B 可触发拦截器
+			 return methodProxy.invoke(target, args); // 必须是原始target对象。 方法 A内部执行到B 不再触发
 	}
 
 }
