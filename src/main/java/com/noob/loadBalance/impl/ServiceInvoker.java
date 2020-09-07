@@ -31,6 +31,6 @@ public class ServiceInvoker {
 	 * @return 标识唯一服务API
 	 */
 	public String getKey() {
-		return this.getApplicationName() + "." + this.getMethodName();
+		return this.getApplicationName() + "." + this.getMethodName(); //dubbo对于这个key需要考虑的更多： 接口+分组+版本
 	}
 }
