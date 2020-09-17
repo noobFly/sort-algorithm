@@ -1,4 +1,4 @@
-package com.noob.test.mock;
+package com.noob.controller;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,15 +16,41 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.noob.controller.NoteController.GroupTestDTO;
 
 // 测试API各种访问方式的Mock
 public class ControllerTest extends BaseTest {
-	@Test
+	
 	public void test() {
 		testMultipartFile();
 		test1();
 		test2();
 		test3();
+		testGroup();
+
+	}
+	@Test
+	public void testGroup() {
+		GroupTestDTO test = new GroupTestDTO("address", "name", "code", "phone");
+		try {
+			System.out.println(mockMvc
+					.perform(MockMvcRequestBuilders.get("/note/testGroupDefault")
+							.contentType(MediaType.APPLICATION_JSON_UTF8).content(JSON.toJSONString(test)))
+					.andDo(MockMvcResultHandlers.print()).andReturn().getResponse().getContentAsString());
+
+			System.out.println(mockMvc
+					.perform(MockMvcRequestBuilders.get("/note/testGroupParent")
+							.contentType(MediaType.APPLICATION_JSON_UTF8).content(JSON.toJSONString(test)))
+					.andDo(MockMvcResultHandlers.print()).andReturn().getResponse().getContentAsString());
+
+			System.out.println(mockMvc
+					.perform(MockMvcRequestBuilders.get("/note/testGroupExtends")
+							.contentType(MediaType.APPLICATION_JSON_UTF8).content(JSON.toJSONString(test)))
+					.andDo(MockMvcResultHandlers.print()).andReturn().getResponse().getContentAsString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	public void testMultipartFile() {
@@ -60,8 +86,8 @@ public class ControllerTest extends BaseTest {
 						.andReturn().getResponse().getContentAsString());
 
 				System.out.println(mockMvc
-						.perform(MockMvcRequestBuilders.get("/note/test1").contentType(MediaType.APPLICATION_JSON_UTF8)
-								.param("param1", "param1").content(JSON.toJSONString(map)))
+						.perform(MockMvcRequestBuilders.get("/note/test1").param("param1", "param1")
+								.contentType(MediaType.APPLICATION_JSON_UTF8).content(JSON.toJSONString(map)))
 						.andExpect(MockMvcResultMatchers.status().isOk()).andDo(MockMvcResultHandlers.print())
 						.andReturn().getResponse().getContentAsString());
 			} catch (Exception e) {

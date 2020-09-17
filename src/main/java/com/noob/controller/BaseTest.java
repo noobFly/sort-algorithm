@@ -1,4 +1,4 @@
-package com.noob.test.mock;
+package com.noob.controller;
 
 import org.junit.Before;
 import org.junit.runner.RunWith;
