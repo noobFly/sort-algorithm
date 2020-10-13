@@ -4,14 +4,10 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.groups.Default;
 
-import org.hibernate.validator.constraints.Length;
 import org.springframework.boot.autoconfigure.web.servlet.MultipartAutoConfiguration;
 import org.springframework.http.MediaType;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,35 +19,19 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.util.WebUtils;
 
 import com.alibaba.fastjson.JSON;
-import com.noob.controller.NoteController.GroupTestDTO.InitAction;
-import com.noob.controller.NoteController.GroupTestDTO.MegreAction;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 验证请求入参出参注解的解析
+ * <p>
+ * @RequestBody、@RequestParam 在 GET POST 都可以正确读入；与 数据组装的方式有关。
+ *
+ */
 @Slf4j
-@RequestMapping("/note")
+@RequestMapping("/request")
 @RestController
-public class NoteController {
-
-	private BService service;
-
-	/*
-	 * @Autowired public void setService(BService service) { this.service = service;
-	 * System.out.println("这里是@Autowired");
-	 * 
-	 * }
-	 */
-
-	/*
-	 * public NoteController(BService b) { System.out.println("这里是Constructor"); }
-	 */
-
-	@PostConstruct
-	public void init() {
-		System.out.println("这里是@PostConstruct");
-	}
+public class RequestController {
 
 	private static final String TMP = System.getProperty("java.io.tmpdir") + File.separator;
 
@@ -79,7 +59,7 @@ public class NoteController {
 		}
 		return fileName;
 	}
-
+	
 	@PostMapping(value = "/upload")
 	public String upload(HttpServletRequest request) {
 		MultipartHttpServletRequest multipartRequest = WebUtils.getNativeRequest(request,
@@ -142,38 +122,6 @@ public class NoteController {
 		log.info("requestMethod: {}", request.getMethod());
 		log.info("contentType: {}", request.getContentType());
 		log.info(info);
-	}
-
-	@RequestMapping("/testGroupDefault")
-	public String testGroupDefault(@RequestBody @Validated GroupTestDTO test) {
-		return "testGroupDefault";
-	}
-
-	@RequestMapping("/testGroupParent")
-	public String testGroupNormal(@RequestBody @Validated(InitAction.class) GroupTestDTO test) {
-		return "testGroupParent";
-	}
-
-	@RequestMapping("/testGroupExtends")
-	public String testGroupExtends(@RequestBody @Validated(MegreAction.class) GroupTestDTO test) {
-		return "testGroupExtends";
-	}
-
-	@NoArgsConstructor
-	@AllArgsConstructor
-	public static class GroupTestDTO {
-		@Length(max = 1, message = "address错误")
-		public String address;
-		@Length(max = 1, message = "name错误", groups = { Default.class, InitAction.class })
-		public String name;
-		@Length(max = 1, message = "code错误", groups = { InitAction.class })
-		public String code;
-		@Length(max = 1, message = "phone错误", groups = { MegreAction.class })
-		public String phone;
-
-		public interface InitAction {}
-
-		public interface MegreAction extends InitAction {}
 	}
 
 }

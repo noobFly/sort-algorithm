@@ -1,0 +1,73 @@
+package com.noob.controller;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.groups.Default;
+
+import org.hibernate.validator.constraints.Length;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.noob.controller.ValidateGroupController.GroupTestDTO.InitAction;
+import com.noob.controller.ValidateGroupController.GroupTestDTO.MegreAction;
+import com.noob.controller.Interceptor.OpLog;
+
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
+/**
+ * 验证校验分组
+ * 
+ * @author admin
+ *
+ */
+
+@RestController
+@RequestMapping("/validate")
+public class ValidateGroupController {
+	@Resource
+	BService bService;
+
+	@RequestMapping("/testGroupDefault")
+	public String testGroupDefault(@RequestBody @Validated GroupTestDTO test) {
+		return "testGroupDefault";
+	}
+
+	@RequestMapping("/testGroupParent")
+	public String testGroupNormal(@RequestBody @Validated(InitAction.class) GroupTestDTO test) {
+		return "testGroupParent";
+	}
+
+	@RequestMapping("/testGroupExtends")
+	public String testGroupExtends(@RequestBody @Validated(MegreAction.class) GroupTestDTO test) {
+		return "testGroupExtends";
+	}
+
+	@OpLog(model = 99)
+	@RequestMapping("/testAdvice")
+	public String testAdvice(@RequestBody GroupTestDTO test, HttpServletRequest requestXX) {
+		return bService.testAdvice();
+	}
+
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class GroupTestDTO {
+		@Length(max = 1, message = "address错误")
+		public String address;
+		@Length(max = 1, message = "name错误", groups = { Default.class, InitAction.class })
+		public String name;
+		@Length(max = 1, message = "code错误", groups = { InitAction.class })
+		public String code;
+		@Length(max = 1, message = "phone错误", groups = { MegreAction.class })
+		public String phone;
+
+		public interface InitAction {
+		}
+
+		public interface MegreAction extends InitAction {
+		}
+	}
+
+}

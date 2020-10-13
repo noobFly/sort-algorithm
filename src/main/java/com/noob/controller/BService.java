@@ -1,14 +1,27 @@
 package com.noob.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+/**
+ * 
+ * 不支持 prototype 模式下的 field属性注入循环依赖
+ *
+ */
+// @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Component
 public class BService {
-	@Autowired
+//	@Autowired
 	public CService cService;
-	// public BService(NoteController a) { }
+
+	public String testAdvice() {
+		System.out.println("目标方法testAdvice");
+		throw new RuntimeException("fail");
+		// return "testAdvice";
+	}
+
+	/*
+	 * 不支持 构造器注入循环依赖
+	 */
+	// public BService(CService a) { }
 }
