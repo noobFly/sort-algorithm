@@ -1,4 +1,4 @@
-package com.noob.controller.Interceptor;
+package com.noob.request.Interceptor;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -16,12 +16,12 @@ import lombok.extern.slf4j.Slf4j;
 @Aspect
 public class ControllerInterceptor {
 	// 表达式
-	@Pointcut(value = "@annotation(com.noob.controller.Interceptor.OpLog)")
+	@Pointcut(value = "@annotation(com.noob.request.Interceptor.OpLog)")
 	// 签名
 	public void opLogPointcut() {
 	}
 
-	//	@Around(value = "execution(@com.noob.controller.Interceptor.OpLog * *.*(..)) && @annotation(opLog)", argNames = "opLog") // 另外的写法
+	//	@Around(value = "execution(@com.noob.request.Interceptor.OpLog * *.*(..)) && @annotation(opLog)", argNames = "opLog") // 另外的写法
 	@Around(value = "opLogPointcut() && @annotation(opLog)")
 	public Object aroundLog(ProceedingJoinPoint point, OpLog opLog) throws Throwable {
 		Object obj = null;

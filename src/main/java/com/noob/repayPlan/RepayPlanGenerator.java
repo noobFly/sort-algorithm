@@ -45,6 +45,7 @@ public interface RepayPlanGenerator {
 		String SYS005 = "SYS005";
 	}
 
+	 // 天数都乘以了100, 使得年化利率传入的是实际年化*100
 	@Getter
 	@AllArgsConstructor(access = AccessLevel.PRIVATE)
 	enum RateBaseTypeEnum {

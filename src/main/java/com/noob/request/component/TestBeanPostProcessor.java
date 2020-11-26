@@ -1,10 +1,10 @@
-package com.noob.controller;
+package com.noob.request.component;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.stereotype.Component;
 
-@Component
+ @Component
 public class TestBeanPostProcessor implements BeanPostProcessor {
 	public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
 		if (beanName.equals("CService")) {

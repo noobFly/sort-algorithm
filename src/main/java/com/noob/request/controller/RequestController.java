@@ -1,4 +1,4 @@
-package com.noob.controller;
+package com.noob.request.controller;
 
 import java.io.File;
 import java.util.List;

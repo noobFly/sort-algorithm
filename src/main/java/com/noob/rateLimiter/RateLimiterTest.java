@@ -1,4 +1,4 @@
-package com.noob.limit;
+package com.noob.rateLimiter;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;

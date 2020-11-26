@@ -1,4 +1,4 @@
-package com.noob.controller.Interceptor;
+package com.noob.request.Interceptor;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @Aspect
 @Component
 public class AdviceInterceptor {
-	@Pointcut(value = "execution(public String com.noob.controller.BService.testAdvice(..))")
+	@Pointcut(value = "execution(public String com.noob.request.component.BService.testAdvice(..))")
 	public void pointcut() {}
 
 	@Before("pointcut()")

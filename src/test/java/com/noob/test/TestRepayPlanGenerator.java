@@ -57,12 +57,12 @@ public class TestRepayPlanGenerator {
 		LoanParam dto = new LoanParam();
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		dto.setStartDate(df.parse("2019-12-17"));
-		dto.setEndDate(df.parse("2020-08-21"));
+		dto.setEndDate(df.parse("2020-11-17"));
 		dto.setTotalPeriod(12);
-		dto.setAmount(new BigDecimal("1000"));
+		dto.setAmount(new BigDecimal("100000"));
 		dto.setPeriodMinDay(10);
 		dto.setRepaymentDay(17);
-		dto.setYearRate(new BigDecimal("24"));
+		dto.setYearRate(new BigDecimal("6")); // 天数都乘以了100, 使得年化利率传入的是实际年化*100
 		dto.setLoanNo("testLoan123456");
 		dto.setGraceDays(2);
 

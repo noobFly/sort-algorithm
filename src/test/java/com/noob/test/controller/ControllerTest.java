@@ -16,7 +16,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.noob.controller.ValidateGroupController.GroupTestDTO;
+import com.noob.request.controller.ValidateGroupController.GroupTestDTO;
 
 // 测试API各种访问方式的Mock
 public class ControllerTest extends BaseTest {

@@ -29,12 +29,13 @@ import lombok.extern.slf4j.Slf4j;
  * <p>
  * 所以 A方法内部执行B方法时 不再触发拦截器
  * 
- * @author admin  {@link org.springframework.context.annotation.SpringCglibProxy}
+ * @author admin {@link org.springframework.context.annotation.SpringCglibProxy}
  *
  */
 @Slf4j
-public class SpringAopProxy {
+public class SpringAopProxyCustomizer {
 	/**
+	 * ProxyFactoryBean.getObject() 执行 DefaultAopProxyFactory.createAopProxy 创建代理对象
 	 * 
 	 * @param bean       真实target对象。
 	 * @param cglibProxy 是否开启cglib代理。但真正是否使用需要后续判定
@@ -42,7 +43,7 @@ public class SpringAopProxy {
 	 */
 	public static ProxyFactoryBean proxyFactoryBean(Object bean, boolean cglibProxy) {
 		ProxyFactoryBean factory = new ProxyFactoryBean();
-		factory.setProxyTargetClass(cglibProxy);
+		factory.setProxyTargetClass(cglibProxy); // 代理类型， 这里设定为true并不表示一定走cglib. 还有其他判定条件
 		factory.addAdvice(new MethodInterceptor() {
 			@Override
 			public Object invoke(MethodInvocation invocation) throws Throwable {
@@ -50,7 +51,8 @@ public class SpringAopProxy {
 				return invocation.proceed();
 			}
 		});
-		factory.setTarget(bean);
+		factory.setTarget(bean); // 源对象实例
+		// factory.setTargetClass(targetClass); 也可以设置对象类型
 		return factory;
 	}
 
@@ -66,7 +68,7 @@ public class SpringAopProxy {
 	 * 代理对象是： com.noob.proxy.jdk.EntityJdk$$EnhancerBySpringCGLIB$$1b6a1486
 	 */
 	private static void testInterface(boolean isProxyTargetClass) {
-		IEntity proxy = (IEntity) SpringAopProxy.proxyFactoryBean(new EntityJdk(), isProxyTargetClass).getObject();
+		IEntity proxy = (IEntity) SpringAopProxyCustomizer.proxyFactoryBean(new EntityJdk(), isProxyTargetClass).getObject();
 		log.info(
 				"Interface: Target:{}, Proxy:{},  isProxyTargetClass: {}, isAopProxy:{}, isJdkDynamicProxy:{}, isCglibProxy:{}",
 				AopUtils.getTargetClass(proxy).getName(), proxy.getClass().getName(), isProxyTargetClass,
@@ -75,7 +77,7 @@ public class SpringAopProxy {
 	}
 
 	private static void testClass(boolean isProxyTargetClass) {
-		EntityCglib proxy = (EntityCglib) SpringAopProxy.proxyFactoryBean(new EntityCglib(), isProxyTargetClass)
+		EntityCglib proxy = (EntityCglib) SpringAopProxyCustomizer.proxyFactoryBean(new EntityCglib(), isProxyTargetClass)
 				.getObject();
 		log.info(
 				"Class: Target:{}, Proxy:{},  isProxyTargetClass: {}, isAopProxy:{}, isJdkDynamicProxy:{}, isCglibProxy:{}",

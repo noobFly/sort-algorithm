@@ -1,7 +1,7 @@
 package com.noob.proxy.cglib;
 
 /**
- * 私有方法直接编译报错
+ * 私有方法直接编译报错, 因为私有权限只能本类使用
  *
  */
 public class TestCglib {

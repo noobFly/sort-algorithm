@@ -1,4 +1,4 @@
-package com.noob.controller;
+package com.noob.request.component;
 
 import javax.annotation.PostConstruct;
 
@@ -11,7 +11,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
-import com.noob.controller.Interceptor.OpLog;
 
 import lombok.Getter;
 
@@ -21,7 +20,7 @@ import lombok.Getter;
  * @author admin
  *
  */
-@Component
+// @Component
 public class ExecuteSortComponent implements BeanFactoryAware, ApplicationContextAware, InitializingBean {
 	@Getter
 	private BService service;

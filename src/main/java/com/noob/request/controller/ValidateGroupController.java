@@ -1,4 +1,4 @@
-package com.noob.controller;
+package com.noob.request.controller;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -10,9 +10,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.noob.controller.ValidateGroupController.GroupTestDTO.InitAction;
-import com.noob.controller.ValidateGroupController.GroupTestDTO.MegreAction;
-import com.noob.controller.Interceptor.OpLog;
+import com.noob.request.Interceptor.OpLog;
+import com.noob.request.component.BService;
+import com.noob.request.controller.ValidateGroupController.GroupTestDTO.InitAction;
+import com.noob.request.controller.ValidateGroupController.GroupTestDTO.MegreAction;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -27,7 +28,7 @@ import lombok.NoArgsConstructor;
 @RestController
 @RequestMapping("/validate")
 public class ValidateGroupController {
-	@Resource
+	//@Resource
 	BService bService;
 
 	@RequestMapping("/testGroupDefault")

@@ -1,11 +1,14 @@
-package com.noob.controller.Interceptor;
+package com.noob.spring.beanDefinition;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target({ElementType.METHOD, ElementType.TYPE})
+@Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface OpLog {
-	int model() default 1;
+public @interface CustomizerClient {
+	public Class<?> targetClass();
+
+	boolean proxyTargetClass() default false;
 }

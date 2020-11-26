@@ -1,4 +1,4 @@
-package com.noob.controller;
+package com.noob.request.component;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -9,9 +9,9 @@ import org.springframework.stereotype.Component;
  *
  */
 // @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@Component
+// @Component
 public class BService {
-//	@Autowired
+	// @Autowired
 	public CService cService;
 
 	public String testAdvice() {
