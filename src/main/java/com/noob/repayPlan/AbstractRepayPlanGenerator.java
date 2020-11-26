@@ -46,12 +46,6 @@ public abstract class AbstractRepayPlanGenerator implements RepayPlanGenerator {
 
 		List<RepayPlan> list = calculate(loanDto);
 
-		if (!RepayMode.SYS001.equals(getRepayMode())) {
-			loanDto.setEndDate(
-					list.stream().max(Comparator.comparing(RepayPlan::getPeriod)).get().getShouldRepaymentDate());
-		} else {
-			loanDto.setTotalPeriod(1);
-		}
 		if (log.isDebugEnabled()) {
 			log.debug("{} 总利息：{}", this.getClass(),
 					list.stream().map(t -> t.getShouldRepaymentInterest()).reduce(BigDecimal.ZERO, (a, b) -> a.add(b)));
@@ -74,6 +68,12 @@ public abstract class AbstractRepayPlanGenerator implements RepayPlanGenerator {
 	protected List<RepayPlan> calculate(LoanParam loanDto) {
 		Map<Date, Boolean> periodEndDateMap = periodEndDateMap(loanDto.getStartDate(), loanDto.getTotalPeriod(),
 				loanDto.getRateBaseType(), loanDto.getRepaymentDay(), loanDto.getPeriodMinDay()); // 各期还款截止时间
+
+		if (!RepayMode.SYS001.equals(getRepayMode())) {
+			loanDto.setEndDate(periodEndDateMap.entrySet().stream().max(Comparator.comparing(Map.Entry::getKey)).get().getKey());
+		} else {
+			loanDto.setTotalPeriod(1);
+		}
 		List<RepayPlan> list = calculate(loanDto, periodEndDateMap,
 				RateBaseTypeEnum.get(loanDto.getRateBaseType()).getBase());
 

@@ -34,7 +34,7 @@ public class TestRepayPlanGenerator {
 
 	public static void averageCapitalPlusInterestRepayPlanGeneratorTest() throws ParseException {
 		LoanParam dto = buildParam();
-		dto.setRateBaseType(RateBaseTypeEnum.DAYLY_360.getType());
+		dto.setRateBaseType(RateBaseTypeEnum.MONTH.getType());
 		print(new AverageCapitalPlusInterestRepayPlanGenerator().handle(dto));
 
 	}
@@ -48,7 +48,7 @@ public class TestRepayPlanGenerator {
 
 	public static void averageCapitalRepayPlanGeneratorTest() throws Exception {
 		LoanParam dto = buildParam();
-		dto.setRateBaseType(RateBaseTypeEnum.DAYLY_365.getType());
+		dto.setRateBaseType(RateBaseTypeEnum.MONTH.getType());
 		print(new AverageCapitalRepayPlanGenerator().handle(dto));
 
 	}
@@ -57,12 +57,12 @@ public class TestRepayPlanGenerator {
 		LoanParam dto = new LoanParam();
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		dto.setStartDate(df.parse("2019-12-17"));
-		dto.setEndDate(df.parse("2020-11-17"));
-		dto.setTotalPeriod(12);
-		dto.setAmount(new BigDecimal("100000"));
+	//	dto.setEndDate(df.parse("2020-12-17"));
+		dto.setTotalPeriod(360);
+		dto.setAmount(new BigDecimal("4000000"));
 		dto.setPeriodMinDay(10);
 		dto.setRepaymentDay(17);
-		dto.setYearRate(new BigDecimal("6")); // 天数都乘以了100, 使得年化利率传入的是实际年化*100
+		dto.setYearRate(new BigDecimal("4.9"));
 		dto.setLoanNo("testLoan123456");
 		dto.setGraceDays(2);
 
@@ -70,15 +70,15 @@ public class TestRepayPlanGenerator {
 	}
 
 	private static void print(List<RepayPlan> handle) {
-		System.out.println(JSON.toJSONStringWithDateFormat(handle, "yyyy-MM-dd"));
+	//	System.out.println(JSON.toJSONStringWithDateFormat(handle, "yyyy-MM-dd"));
 	}
 
 	public static void main(String[] args) throws Exception {
 		try {
-			oneTimeRepaymentPlanGeneratorTest();
-			interestFirstRepaymentPlanGeneratorTest();
+		//	oneTimeRepaymentPlanGeneratorTest();
+			//	interestFirstRepaymentPlanGeneratorTest();
 			averageCapitalPlusInterestRepayPlanGeneratorTest();
-			averageCapitalAndInterestRepayPlanGeneratorTest();
+			//	averageCapitalAndInterestRepayPlanGeneratorTest();
 			averageCapitalRepayPlanGeneratorTest();
 
 		} catch (Exception e) {
