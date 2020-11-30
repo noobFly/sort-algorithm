@@ -20,7 +20,7 @@ public class CustomizerClientFactoryBean<T> implements FactoryBean<T> {
 
 	public CustomizerClientFactoryBean(Class<T> clas) {
 		this.clas = clas;
-		proxyTargetClass = clas.getAnnotation(CustomizerClient.class).proxyTargetClass();
+		proxyTargetClass = clas.getAnnotation(CustomizerClient.class).proxyTargetClass(); // 最终会被BeanDefinition里的属性集合propertyValues覆盖
 	}
 
 	@Override
@@ -53,5 +53,6 @@ public class CustomizerClientFactoryBean<T> implements FactoryBean<T> {
 	public boolean isSingleton() {
 		return true;
 	}
+
 
 }

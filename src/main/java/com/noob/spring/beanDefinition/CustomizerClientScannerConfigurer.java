@@ -10,6 +10,7 @@ import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
 import org.springframework.boot.autoconfigure.AutoConfigurationPackages;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import com.google.common.base.Strings;
@@ -17,7 +18,7 @@ import com.google.common.base.Strings;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-
+@Component
 @Slf4j
 public class CustomizerClientScannerConfigurer implements BeanFactoryAware, BeanDefinitionRegistryPostProcessor {
 	@Setter

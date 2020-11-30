@@ -14,6 +14,7 @@ import com.noob.request.Interceptor.OpLog;
 import com.noob.request.component.BService;
 import com.noob.request.controller.ValidateGroupController.GroupTestDTO.InitAction;
 import com.noob.request.controller.ValidateGroupController.GroupTestDTO.MegreAction;
+import com.noob.spring.beanDefinition.ITest;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -30,6 +31,8 @@ import lombok.NoArgsConstructor;
 public class ValidateGroupController {
 	//@Resource
 	BService bService;
+	@Resource
+	ITest itest;
 
 	@RequestMapping("/testGroupDefault")
 	public String testGroupDefault(@RequestBody @Validated GroupTestDTO test) {
