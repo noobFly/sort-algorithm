@@ -20,6 +20,7 @@ public class CustomizerClientFactoryBean<T> implements FactoryBean<T> {
 
 	public CustomizerClientFactoryBean(Class<T> clas) {
 		this.clas = clas;
+		proxyTargetClass = clas.getAnnotation(CustomizerClient.class).proxyTargetClass();
 	}
 
 	@Override

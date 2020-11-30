@@ -41,9 +41,11 @@ public class SpringAopProxyCustomizer {
 	 * @param cglibProxy 是否开启cglib代理。但真正是否使用需要后续判定
 	 * @return
 	 */
-	public static ProxyFactoryBean proxyFactoryBean(Object bean, boolean cglibProxy) {
+	public static ProxyFactoryBean proxyFactoryBean(Object bean, boolean cglibProxy, Class<?> targetClass) {
 		ProxyFactoryBean factory = new ProxyFactoryBean();
-		factory.setProxyTargetClass(cglibProxy); // 代理类型， 这里设定为true并不表示一定走cglib. 还有其他判定条件
+		// 代理类型， 这里设定为true并不表示一定走cglib. 还有其他判定条件:
+		// 见ProxyFactoryBean.getObject -> ProxyFactoryBean.getSingletonInstance -> ProxyFactoryBean.getProxy -> DefaultAopProxyFactory.createAopProxy
+		factory.setProxyTargetClass(cglibProxy); 
 		factory.addAdvice(new MethodInterceptor() {
 			@Override
 			public Object invoke(MethodInvocation invocation) throws Throwable {
@@ -51,8 +53,8 @@ public class SpringAopProxyCustomizer {
 				return invocation.proceed();
 			}
 		});
-		factory.setTarget(bean); // 源对象实例
-		// factory.setTargetClass(targetClass); 也可以设置对象类型
+	 factory.setTarget(bean); // 源对象实例
+	 factory.setTargetClass(targetClass); // 也可以设置对象类型 ，根据源码分析，都是给ProxyFactoryBean内的属性TargetSource设置。 应该是只有最后的设置属性才生效的
 		return factory;
 	}
 
@@ -68,7 +70,9 @@ public class SpringAopProxyCustomizer {
 	 * 代理对象是： com.noob.proxy.jdk.EntityJdk$$EnhancerBySpringCGLIB$$1b6a1486
 	 */
 	private static void testInterface(boolean isProxyTargetClass) {
-		IEntity proxy = (IEntity) SpringAopProxyCustomizer.proxyFactoryBean(new EntityJdk(), isProxyTargetClass).getObject();
+	 IEntity proxy = (IEntity) SpringAopProxyCustomizer.proxyFactoryBean(new EntityJdk(), isProxyTargetClass, null).getObject();
+	//		IEntity proxy = (IEntity) SpringAopProxyCustomizer.proxyFactoryBean(null, isProxyTargetClass, EntityJdk.class).getObject();
+
 		log.info(
 				"Interface: Target:{}, Proxy:{},  isProxyTargetClass: {}, isAopProxy:{}, isJdkDynamicProxy:{}, isCglibProxy:{}",
 				AopUtils.getTargetClass(proxy).getName(), proxy.getClass().getName(), isProxyTargetClass,
@@ -77,7 +81,7 @@ public class SpringAopProxyCustomizer {
 	}
 
 	private static void testClass(boolean isProxyTargetClass) {
-		EntityCglib proxy = (EntityCglib) SpringAopProxyCustomizer.proxyFactoryBean(new EntityCglib(), isProxyTargetClass)
+		EntityCglib proxy = (EntityCglib) SpringAopProxyCustomizer.proxyFactoryBean(new EntityCglib(), isProxyTargetClass, null)
 				.getObject();
 		log.info(
 				"Class: Target:{}, Proxy:{},  isProxyTargetClass: {}, isAopProxy:{}, isJdkDynamicProxy:{}, isCglibProxy:{}",

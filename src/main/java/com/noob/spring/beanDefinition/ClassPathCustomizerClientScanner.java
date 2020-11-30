@@ -6,12 +6,12 @@ import java.util.Arrays;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
-import org.springframework.beans.factory.annotation.AnnotatedGenericBeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.context.annotation.ClassPathBeanDefinitionScanner;
+import org.springframework.context.annotation.ScannedGenericBeanDefinition;
 import org.springframework.core.type.classreading.MetadataReader;
 import org.springframework.core.type.classreading.MetadataReaderFactory;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
@@ -43,21 +43,20 @@ public class ClassPathCustomizerClientScanner extends ClassPathBeanDefinitionSca
 	}
 
 	private void processBeanDefinitions(Set<BeanDefinitionHolder> beanDefinitions) {
-		AnnotatedGenericBeanDefinition definition;
+		ScannedGenericBeanDefinition definition;
 		for (BeanDefinitionHolder holder : beanDefinitions) {
-			definition = (AnnotatedGenericBeanDefinition) holder.getBeanDefinition();
+			definition = (ScannedGenericBeanDefinition) holder.getBeanDefinition();
 
 			if (logger.isDebugEnabled()) {
 				logger.debug("Creating CustomizerClientFactoryBean with name '" + holder.getBeanName() + "' and '"
 						+ definition.getBeanClassName() + "' CustomizerClient");
 			}
 			
-			
+			definition.getConstructorArgumentValues().addGenericArgumentValue(definition.getBeanClassName()); // 设置构造器的参数 。 一定要先于 setBeanClass才生效！
 			definition.setBeanClass(CustomizerClientFactoryBean.class); // 设置工厂类
 
-			definition.getConstructorArgumentValues().addGenericArgumentValue(definition.getBeanClassName()); // 设置构造器的参数
 			// 这里也可以通过设置属性方式注入代理工厂类必要的属性值
-			definition.getPropertyValues().add("proxyTargetClass", definition.getMetadataAttribute("proxyTargetClass"));
+			definition.getPropertyValues().add("proxyTargetClass", true); 
 			definition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE);
 		}
 	}
