@@ -8,7 +8,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import com.noob.spring.beanDefinition.CustomizerClientScannerConfigurer2.BeanDefinitionRegistrarForImport;
 @EnableAsync
 @SpringBootApplication
-@Import(BeanDefinitionRegistrarForImport.class)
+//@Import(BeanDefinitionRegistrarForImport.class)
 public class BootstrapApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(BootstrapApplication.class, args);
