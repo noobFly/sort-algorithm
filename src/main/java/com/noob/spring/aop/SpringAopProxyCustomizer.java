@@ -87,6 +87,6 @@ public class SpringAopProxyCustomizer {
 				"Class: Target:{}, Proxy:{},  isProxyTargetClass: {}, isAopProxy:{}, isJdkDynamicProxy:{}, isCglibProxy:{}",
 				AopUtils.getTargetClass(proxy).getName(), proxy.getClass().getName(), isProxyTargetClass,
 				AopUtils.isAopProxy(proxy), AopUtils.isJdkDynamicProxy(proxy), AopUtils.isCglibProxy(proxy));
-		proxy.test();
+		proxy.testPublic();
 	}
 }

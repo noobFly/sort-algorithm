@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableAsync;
 
-import com.noob.spring.beanDefinition.CustomizerClientScannerConfigurer2.BeanDefinitionRegistrarForImport;
+import com.noob.spring.beanDefinition.CustomizerClientImporter.BeanDefinitionRegistrarForImport;
 @EnableAsync
 @SpringBootApplication
 //@Import(BeanDefinitionRegistrarForImport.class)

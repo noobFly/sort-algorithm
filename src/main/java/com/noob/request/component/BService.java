@@ -1,6 +1,7 @@
 package com.noob.request.component;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 /**
@@ -8,8 +9,8 @@ import org.springframework.stereotype.Component;
  * 不支持 prototype 模式下的 field属性注入循环依赖
  *
  */
-// @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-// @Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@Component
 public class BService {
 	// @Autowired
 	public CService cService;

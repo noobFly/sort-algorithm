@@ -10,10 +10,10 @@ public class EntityCglib {
 		System.out.println("real pre ");
 	}
 
-	public void test() {
+	public void testPublic() {
 		pre();
 		testprivate();
-		System.out.println("real test.");
+		System.out.println("real testPublic.");
 	}
 
 	private void testprivate() {
@@ -32,7 +32,7 @@ public class EntityCglib {
 		System.out.println("teststatic.");
 	}
 
-	void testdefault() {
+	 void testdefault() {
 		System.out.println("testdefault.");
 	}
 

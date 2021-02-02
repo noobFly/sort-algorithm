@@ -52,7 +52,7 @@ public class ClassPathCustomizerClientScanner extends ClassPathBeanDefinitionSca
 						+ definition.getBeanClassName() + "' CustomizerClient");
 			}
 			
-			definition.getConstructorArgumentValues().addGenericArgumentValue(definition.getBeanClassName()); // 设置构造器的参数 。 一定要先于 setBeanClass才生效！
+			definition.getConstructorArgumentValues().addGenericArgumentValue(definition.getBeanClassName()); // 设置构造器的参数，definition.getBeanClassName()需要先于 definition.setBeanClass执行才能得到源真实类名！ 
 			definition.setBeanClass(CustomizerClientFactoryBean.class); // 设置工厂类
 
 			// 这里也可以通过设置属性方式注入代理工厂类必要的属性值

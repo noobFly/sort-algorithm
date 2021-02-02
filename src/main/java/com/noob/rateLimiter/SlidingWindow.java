@@ -16,10 +16,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SlidingWindow {
 
-	/* 循环队列 */
+	/* 假定为环状队列 */
 	private AtomicReference<SlidingCounter>[] timeSlices;
 	/* 队列的总长度 */
-	private int totalTimeSlice;
+	private int timeSliceTotalSize;
 	/* 每个时间片的时长 毫秒 */
 	private int timeSlice;
 	/* 统计窗口 时间片个数 */
@@ -28,7 +28,7 @@ public class SlidingWindow {
 	public SlidingWindow(int timeSlice, int windowSize) {
 		this.timeSlice = timeSlice;
 		this.windowSize = windowSize;
-		this.totalTimeSlice = windowSize * 3 + 1; // 这里最好设置较大些。在reset单个timeSlices[index]时，可以降低误差
+		this.timeSliceTotalSize = windowSize * 3 + 1; // 这里最好设置较大些。在reset单个timeSlices[index]时，可以降低误差
 		initTimeSlices();
 	}
 
@@ -40,15 +40,16 @@ public class SlidingWindow {
 		if (timeSlices != null) {
 			return;
 		}
-		timeSlices = new AtomicReference[totalTimeSlice];
-		for (int i = 0; i < totalTimeSlice; i++) {
+		timeSlices = new AtomicReference[timeSliceTotalSize];
+		for (int i = 0; i < timeSliceTotalSize; i++) {
 			timeSlices[i] = new AtomicReference<SlidingCounter>(new SlidingCounter());
 		}
 	}
 
+	// 定位当前时间在哪个时间片上
 	private SlidingCounter locationIndex() {
 		long time = System.currentTimeMillis();
-		int index = (int) ((time / timeSlice) % totalTimeSlice);
+		int index = (int) ((time / timeSlice) % timeSliceTotalSize);
 
 		return new SlidingCounter(time - time % timeSlice, index);
 	}
@@ -66,15 +67,16 @@ public class SlidingWindow {
 		int sum = 0;
 		// cursor等于index，返回true，否则返回false，并会将cursor设置为index
 		SlidingCounter oldSlidingCounter = timeSlices[index].get();
+		// 更新时间片上的新周期信息
 		if (oldSlidingCounter.getIndex() != index || oldSlidingCounter.getOffsetTime() != time) {
-			// compareAndSet比较的是内存地址，和值无关。 为防止并发修改所以就不能直接在原对象上变更
+			// compareAndSet比较的是内存地址，和值无关。 为防止并发修改且offsetTime、index 需要原子性统一更新，所以就不能直接在原对象上变更。
 			boolean reset = timeSlices[index].compareAndSet(oldSlidingCounter, newSlidingCounter);
 			log.info("变动计数器 idnex:{}, offset:{}, 结果:{}", index, time, reset);
 
 		}
 
 		for (int i = 0; i < windowSize; i++) {
-			sum += timeSlices[(index - i + totalTimeSlice) % totalTimeSlice].get().getValue().get();
+			sum += timeSlices[(index - i + timeSliceTotalSize) % timeSliceTotalSize].get().getValue().get(); // 兼容处理环状队列的首尾情况
 		}
 
 		// 阈值判断 sum是从0开始

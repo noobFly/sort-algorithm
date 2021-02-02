@@ -29,8 +29,9 @@ import lombok.extern.slf4j.Slf4j;
  * <p>
  * 在intercept方法中最终执行的"cglibMethodProxy.invokeSuper(enhancedConfigInstance,
  * beanMethodArgs)" 就是org.springframework.cglib.proxy.MethodProxy.invokeSuper
- * <p>
+ * 
  * 所以 方法A执行到方法B 会再次触发拦截器
+ * <p> 同时，该拦截方法逻辑的执行里，会优先判定容器中是否存在方法B已经创建（或可提前引用）的bean, 有则直接使用，否则创建新实例代理。
  * 
  * @author admin
  *
@@ -55,7 +56,7 @@ public class SpringCglibProxy {
 			}
 		});
 		EntityCglib proxy = (EntityCglib) enhancer.create();
-		proxy.test();
+		proxy.testPublic();
 
 	}
 

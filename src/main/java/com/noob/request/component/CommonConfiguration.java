@@ -11,7 +11,7 @@ import org.springframework.context.annotation.ImportSelector;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.type.AnnotationMetadata;
 
-@Configuration
+
 public class CommonConfiguration implements ImportAware {
 	@Bean
 	public Properties properties(@Qualifier("getBservice2") BService bService) {

@@ -6,6 +6,6 @@ import org.springframework.stereotype.Service;
 // @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Service
 public class CService {
-	//@Autowired
+	@Autowired
 	public BService bService;
 }

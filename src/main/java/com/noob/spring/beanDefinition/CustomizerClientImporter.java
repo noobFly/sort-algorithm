@@ -17,8 +17,8 @@ import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.util.StringUtils;
 
-import com.noob.spring.beanDefinition.CustomizerClientScannerConfigurer2.BeanDefinitionRegistrarForImport;
-import com.noob.spring.beanDefinition.CustomizerClientScannerConfigurer2.TestNestConfiguration;
+import com.noob.spring.beanDefinition.CustomizerClientImporter.BeanDefinitionRegistrarForImport;
+import com.noob.spring.beanDefinition.CustomizerClientImporter.TestNestConfiguration;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 @Import(value = { BeanDefinitionRegistrarForImport.class, TestNestConfiguration.class })
 @AutoConfigurationPackage
 @Slf4j
-public class CustomizerClientScannerConfigurer2 implements BeanFactoryAware, ImportBeanDefinitionRegistrar {
+public class CustomizerClientImporter implements BeanFactoryAware, ImportBeanDefinitionRegistrar {
 
 	private BeanFactory beanFactory;
 

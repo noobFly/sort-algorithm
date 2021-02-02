@@ -1,4 +1,4 @@
-package com.noob.rateLimiter;
+package com.google.common.util.concurrent;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.google.common.base.Stopwatch;
 import com.google.common.util.concurrent.RateLimiter;
+import com.google.common.util.concurrent.RateLimiter.SleepingStopwatch;
 
 public class RateLimiterTest {
 	public static void main(String args[]) throws Exception {
@@ -17,7 +18,7 @@ public class RateLimiterTest {
 	}
 
 	private static void testSmoothWarmingUp() throws Exception {
-		RateLimiterWrapper limiter = new RateLimiterWrapper(RateLimiter.create(5, 1, TimeUnit.SECONDS));
+		RateLimiterWrapper limiter = new RateLimiterWrapper(RateLimiter.create(5, 1, TimeUnit.SECONDS, 4.0, SleepingStopwatch.createFromSystemTimer()));
 		limiter.acquire();
 		limiter.acquire();
 		limiter.acquire();
